@@ -190,14 +190,22 @@
 
     /* Quanto o cartão anda para o lado no mesmo percurso. Sem isso a
        descida vira elevador; a diagonal é o que dá o movimento. */
-    /* Na tela estreita o cartão ocupa quase a largura toda, e um desvio
-       pequeno deixaria o vizinho atrás em vez de ao lado. Lá ele sai
-       bem mais para o canto, que é o que faz o do meio respirar. */
-    const estreito = global.innerWidth <= LARGURA_ESTREITA;
-    const desvio = estreito
-      ? Math.round(this.palco.clientWidth * 0.46)
-      : Math.min(300, Math.round(this.palco.clientWidth * 0.24));
-    this.palco.style.setProperty('--desvio', desvio + 'px');
+    /* Quanto o cartão anda para o lado ao longo do percurso. Sem isso a
+       descida vira elevador; a diagonal é o que dá o movimento.
+
+       O teto sai de conta, não de chute: o palco recorta o que passa da
+       borda, e o corte é uma linha reta que fatia foto e texto no meio.
+       O cartão mais deslocado é o da ponta do trilho (|u| = 1), que
+       também é o mais encolhido — então a folga que sobra para ele é
+       metade do palco menos metade da largura já encolhida. */
+    const larguraCartao = this.cartoes[0].offsetWidth;
+    const encolhe =
+      parseFloat(global.getComputedStyle(this.cartoes[0]).getPropertyValue('--encolhe')) || 0;
+    const meiaLarguraNaPonta = (larguraCartao * (1 - encolhe)) / 2;
+    const folga = Math.max(0, this.palco.clientWidth / 2 - meiaLarguraNaPonta);
+
+    const desejado = Math.min(300, this.palco.clientWidth * 0.24);
+    this.palco.style.setProperty('--desvio', Math.round(Math.min(desejado, folga)) + 'px');
   };
 
   /* Onde a rolagem está agora. Devolve null quando não há percurso. */
