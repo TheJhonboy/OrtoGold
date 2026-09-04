@@ -202,7 +202,26 @@
     </header>
 
     <div class="catalogo">
-      <div class="abas" id="abas" role="tablist" aria-label="Categorias de produto"></div>
+      <!-- As categorias ficam numa faixa deitada, acima dos produtos. Quando
+           não cabem todas na largura da tela, a faixa vira um carrossel: as
+           setas e o trilho aparecem sozinhos. Se couber tudo, os dois somem
+           para não poluir. -->
+      <div class="abas-caixa">
+        <div class="abas-barra">
+          <button class="abas-seta abas-seta--antes" id="abas-antes" type="button"
+                  aria-label="Ver categorias anteriores" hidden>
+            <span class="abas-seta__ico" data-icone="seta"></span>
+          </button>
+          <div class="abas" id="abas" role="tablist" aria-label="Categorias de produto"></div>
+          <button class="abas-seta abas-seta--depois" id="abas-depois" type="button"
+                  aria-label="Ver próximas categorias" hidden>
+            <span class="abas-seta__ico" data-icone="seta"></span>
+          </button>
+        </div>
+        <div class="abas-trilho" id="abas-trilho" aria-hidden="true" hidden>
+          <span class="abas-trilho__bolinha" id="abas-bolinha"></span>
+        </div>
+      </div>
       <div class="produtos" id="produtos"></div>
     </div>
   </div>

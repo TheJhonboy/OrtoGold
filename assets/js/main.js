@@ -196,6 +196,92 @@
     });
 
     mostrar(CATEGORIAS[0].id);
+    navegarAbas(abas);
+  }
+
+  /* ---------------------------------------------------------
+     FAIXA DE CATEGORIAS — setas e trilho
+     ---------------------------------------------------------
+     A faixa é uma lista deitada com overflow. Quando tudo cabe na
+     largura, não há o que rolar: setas e trilho ficam escondidos, senão
+     viram enfeite que não faz nada. Quem manda no estado é sempre o
+     scrollLeft real do elemento — o trilho apenas reflete e comanda.
+     --------------------------------------------------------- */
+  function navegarAbas(abas) {
+    const antes = $('#abas-antes');
+    const depois = $('#abas-depois');
+    const trilho = $('#abas-trilho');
+    if (!antes || !depois || !trilho) return;
+
+    ligarIcones(antes);
+    ligarIcones(depois);
+
+    // Sobra de rolagem. Zero (ou menos, por arredondamento do navegador)
+    // significa que a faixa inteira está visível.
+    const sobra = () => abas.scrollWidth - abas.clientWidth;
+
+    function atualizar() {
+      const cabeTudo = sobra() <= 1;
+      antes.hidden = cabeTudo;
+      depois.hidden = cabeTudo;
+      trilho.hidden = cabeTudo;
+      if (cabeTudo) return;
+
+      const fracao = Math.min(1, Math.max(0, abas.scrollLeft / sobra()));
+      trilho.style.setProperty('--pos', fracao.toFixed(4));
+      antes.disabled = abas.scrollLeft <= 1;
+      depois.disabled = abas.scrollLeft >= sobra() - 1;
+    }
+
+    // Um passo é 70% do que está à vista: sempre sobra uma categoria
+    // conhecida na tela, então a pessoa não se perde.
+    const passo = () => Math.max(160, abas.clientWidth * 0.7);
+    antes.addEventListener('click', () => abas.scrollBy({ left: -passo(), behavior: 'smooth' }));
+    depois.addEventListener('click', () => abas.scrollBy({ left: passo(), behavior: 'smooth' }));
+
+    // Arrastar a bolinha (ou clicar em qualquer ponto do trilho).
+    // Durante o arrasto o scroll tem que ser instantâneo, senão a
+    // animação suave do CSS faz a bolinha correr atrás do dedo.
+    let arrastando = false;
+
+    function irPara(clienteX) {
+      const caixa = trilho.getBoundingClientRect();
+      const fracao = Math.min(1, Math.max(0, (clienteX - caixa.left) / caixa.width));
+      abas.style.scrollBehavior = 'auto';
+      abas.scrollLeft = fracao * sobra();
+      abas.style.scrollBehavior = '';
+      atualizar();
+    }
+
+    trilho.addEventListener('pointerdown', (ev) => {
+      if (trilho.hidden) return;
+      arrastando = true;
+      trilho.classList.add('esta-arrastando');
+      trilho.setPointerCapture(ev.pointerId);
+      irPara(ev.clientX);
+    });
+    trilho.addEventListener('pointermove', (ev) => {
+      if (arrastando) irPara(ev.clientX);
+    });
+    ['pointerup', 'pointercancel'].forEach((nome) =>
+      trilho.addEventListener(nome, () => {
+        arrastando = false;
+        trilho.classList.remove('esta-arrastando');
+      })
+    );
+
+    abas.addEventListener('scroll', atualizar, { passive: true });
+
+    // A faixa muda de tamanho quando a janela muda e também quando as
+    // fontes terminam de carregar — por isso observa o elemento, em vez
+    // de confiar só no resize da janela.
+    if (window.ResizeObserver) {
+      new ResizeObserver(atualizar).observe(abas);
+    } else {
+      window.addEventListener('resize', atualizar);
+    }
+
+    atualizar();
   }
 
   /* ---------------------------------------------------------

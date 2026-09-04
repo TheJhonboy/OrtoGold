@@ -310,12 +310,35 @@ button { font: inherit; cursor: pointer; }
 .destaque span { display: block; font-size: .84rem; color: var(--cinza); }
 
 /* --------------------------- CATÁLOGO ---------------------- */
-.catalogo { display: grid; grid-template-columns: 232px 1fr; gap: 28px; align-items: start; }
+/* O catálogo é uma coluna só: faixa de categorias em cima, produtos
+   embaixo. A lateral saiu para devolver a largura inteira à grade. */
+/* minmax(0, 1fr) e não 1fr: a coluna automática do grid cresceria até o
+   conteúdo mais largo e empurraria a página inteira para o lado. */
+.catalogo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
 
-.abas { display: flex; flex-direction: column; gap: 8px; position: sticky; top: 84px; }
+/* Cabeça mais curta que a das outras seções: o pedido era encostar o
+   catálogo no título em vez de deixar um vão no meio. */
+#catalogo { padding-top: clamp(40px, 6vw, 68px); }
+#catalogo .secao__cabeca { margin-bottom: 26px; }
+
+.abas-caixa { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.abas-barra { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+/* O padding de 2px com margem negativa igual existe para a borda e o
+   foco da aba não serem cortados pelo overflow do carrossel. */
+/* min-width: 0 é obrigatório: sem ele o item flex adota o tamanho do
+   próprio conteúdo e estoura a barra em vez de rolar por dentro. */
+.abas {
+  display: flex; flex-direction: row; gap: 10px; flex: 1 1 auto; min-width: 0;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-behavior: smooth;
+  padding: 2px; margin: -2px;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.abas::-webkit-scrollbar { display: none; }
+
 .aba {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px; border-radius: var(--raio);
+  display: flex; align-items: center; gap: 12px; flex: none; white-space: nowrap;
+  padding: 14px 18px; border-radius: var(--raio);
   border: 1.5px solid var(--borda); background: #fff;
   font-family: var(--display); font-weight: 700; font-size: .96rem; color: var(--grafite);
   text-align: left; transition: all .18s ease;
@@ -325,6 +348,39 @@ button { font: inherit; cursor: pointer; }
 .aba:hover { border-color: var(--azul-claro); }
 .aba[aria-selected="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
 .aba[aria-selected="true"] .aba__ico { color: var(--ouro); }
+
+/* Setas: só existem no HTML quando há o que rolar. O JS tira o hidden. */
+.abas-seta {
+  flex: none; width: 42px; height: 42px; border-radius: 50%;
+  border: 1.5px solid var(--borda); background: #fff; color: var(--azul);
+  display: grid; place-items: center; cursor: pointer; transition: all .18s ease;
+}
+/* Sem isto o display acima venceria o [hidden] do navegador e a seta
+   apareceria mesmo quando não há o que rolar. */
+.abas-seta[hidden], .abas-trilho[hidden] { display: none; }
+.abas-seta:hover { border-color: var(--azul-claro); color: var(--azul-claro); }
+.abas-seta[disabled] { opacity: .3; cursor: default; }
+.abas-seta[disabled]:hover { border-color: var(--borda); color: var(--azul); }
+.abas-seta__ico { width: 16px; height: 16px; display: block; }
+.abas-seta__ico svg { width: 100%; height: 100%; }
+.abas-seta--antes .abas-seta__ico { transform: rotate(180deg); }
+
+/* Trilho: a barrinha com a bolinha que a pessoa arrasta. É atalho de
+   mouse e dedo — quem usa teclado navega pelas setas e pelo Tab, por
+   isso ele fica fora da árvore de acessibilidade. */
+.abas-trilho {
+  position: relative; height: 5px; border-radius: 999px;
+  background: var(--borda); width: min(340px, 70%); margin: 0 auto;
+  cursor: pointer; touch-action: none;
+}
+.abas-trilho__bolinha {
+  position: absolute; top: 50%; left: calc(9px + var(--pos, 0) * (100% - 18px));
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--azul); border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(16, 22, 60, .28);
+  transform: translate(-50%, -50%);
+}
+.abas-trilho.esta-arrastando .abas-trilho__bolinha { background: var(--azul-claro); }
 
 .produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
@@ -661,12 +717,10 @@ button { font: inherit; cursor: pointer; }
 }
 
 @media (max-width: 1040px) {
-  .catalogo { grid-template-columns: 1fr; }
-  .abas { flex-direction: row; overflow-x: auto; position: sticky; top: 68px; z-index: 20;
-          background: #fff; padding: 10px 0; margin-inline: -20px; padding-inline: 20px;
-          scrollbar-width: none; }
-  .abas::-webkit-scrollbar { display: none; }
-  .aba { flex: none; white-space: nowrap; }
+  /* A faixa gruda no topo enquanto a pessoa desce pelos produtos, para
+     trocar de categoria sem ter que voltar lá em cima. */
+  .abas-caixa { position: sticky; top: 68px; z-index: 20; background: #fff;
+                margin-inline: -20px; padding: 10px 20px; }
   .produtos { grid-template-columns: repeat(2, 1fr); }
   .consultor__grade, .redes__grade, .casa__grade { grid-template-columns: 1fr; gap: 34px; }
   .consultor__cartao { max-width: 380px; }
@@ -745,6 +799,10 @@ button { font: inherit; cursor: pointer; }
 
 @media (max-width: 560px) {
   .produtos { grid-template-columns: 1fr; }
+  /* No celular o dedo arrasta a faixa direto; as setas só roubariam
+     largura das categorias. O trilho fica, mostrando onde a pessoa está. */
+  .abas-seta { display: none; }
+  .abas-trilho { width: 100%; }
   .depoimentos__grade { grid-template-columns: 1fr; }
   .destaques__grade { grid-template-columns: 1fr; }
   .destaque + .destaque { border-left: 0 !important; border-top: 1px solid var(--borda); }
