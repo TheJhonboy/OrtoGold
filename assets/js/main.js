@@ -188,24 +188,26 @@
         ? new window.Vitrine(secaoVitrine, palco, grade)
         : null;
 
-    function mostrar(cat) {
+    // recomecar liga quando a troca partiu de um clique na aba: aí o
+    // trilho roda de novo desde o primeiro produto da categoria nova.
+    function mostrar(cat, recomecar) {
       const itens = PRODUTOS.filter((p) => p.cat === cat);
       grade.innerHTML = itens.length
         ? itens.map(cartaoProduto).join('')
         : '<p class="secao__texto">Em breve. Fale com o Gilson que ele te conta o que temos disponível.</p>';
       ligarIcones(grade);
       grade.setAttribute('aria-labelledby', 'aba-' + cat);
-      if (vitrine) vitrine.montar();
+      if (vitrine) vitrine.montar(recomecar);
     }
 
     abas.addEventListener('click', (ev) => {
       const botao = ev.target.closest('.aba');
       if (!botao) return;
       $$('.aba', abas).forEach((b) => b.setAttribute('aria-selected', String(b === botao)));
-      mostrar(botao.dataset.cat);
+      mostrar(botao.dataset.cat, true);
     });
 
-    mostrar(CATEGORIAS[0].id);
+    mostrar(CATEGORIAS[0].id, false);
     navegarAbas(abas);
   }
 

@@ -30,6 +30,12 @@
      sempre dois na tela ao mesmo tempo, que é o efeito pedido. */
   const ESPACAMENTO = 0.85;
 
+  /* Em que ponto do trilho o primeiro cartão nasce. Não é 1 — na ponta
+     ele estaria quase transparente, e quem troca de categoria abriria a
+     seção olhando para um palco vazio. Em 0.75 ele já aparece inteiro,
+     torto, entrando. */
+  const NASCE_EM = 0.75;
+
   /* Rolagem gasta por cartão. Menos que isto e o trilho vira um
      borrão; mais e a pessoa fica presa rolando sem ver mudança. */
   const TELAS_POR_CARTAO = 0.75;
@@ -68,7 +74,10 @@
     this.progresso = 0;
   }
 
-  Vitrine.prototype.montar = function () {
+  /* `recomecar` chega ligado quando a pessoa troca de categoria: aí o
+     trilho tem que rodar de novo desde o primeiro produto, em vez de
+     continuar de onde a categoria anterior parou. */
+  Vitrine.prototype.montar = function (recomecar) {
     this.desmontar();
 
     if (!this.secao || !this.palco || !this.grade) return;
@@ -78,8 +87,9 @@
     if (this.cartoes.length < 2) return;
 
     /* O percurso total em unidades de `u`: o primeiro cartão nasce em
-       +1 e o último morre em -1, com os outros escalonados no meio. */
-    this.percurso = (this.cartoes.length - 1) * ESPACAMENTO + 2;
+       NASCE_EM e o último morre em -1, com os outros escalonados no
+       meio. */
+    this.percurso = (this.cartoes.length - 1) * ESPACAMENTO + NASCE_EM + 1;
 
     this.cartoes.forEach((cartao) => {
       cartao.dataset.palco = '';
@@ -98,8 +108,29 @@
     };
     global.addEventListener('resize', this.aoRedimensionar, { passive: true });
 
+    /* A altura da seção acabou de mudar junto com o número de produtos
+       da categoria, então rolar só faz sentido depois de medir. */
+    if (recomecar) this.voltarAoInicio();
+
     // Sem perseguição no primeiro quadro: o trilho já nasce no lugar.
     this.atualizar();
+  };
+
+  /* Leva a página ao ponto onde o percurso começa. As abas e o título
+     estão presos na tela, então nada pisca de lugar: só os produtos é
+     que voltam para o começo da fila. */
+  Vitrine.prototype.voltarAoInicio = function () {
+    const inicio = Math.round(this.secao.getBoundingClientRect().top + global.scrollY);
+    if (Math.abs(global.scrollY - inicio) < 2) return;
+
+    this.progresso = 0;
+    global.scrollTo({
+      top: inicio,
+      /* Salto seco. Com rolagem suave a página ainda estaria a caminho
+         enquanto o trilho já perseguia o destino, e os produtos novos
+         passariam correndo antes de a pessoa chegar lá. */
+      behavior: 'instant',
+    });
   };
 
   Vitrine.prototype.desmontar = function () {
@@ -213,7 +244,7 @@
     if (!this.cartoes.length) return;
 
     this.cartoes.forEach((cartao, i) => {
-      const u = 1 + i * ESPACAMENTO - p * this.percurso;
+      const u = NASCE_EM + i * ESPACAMENTO - p * this.percurso;
       const preso = limitar(u, -1.35, 1.35);
 
       /* Some antes de chegar à borda: cartão sumindo no meio do nada é
