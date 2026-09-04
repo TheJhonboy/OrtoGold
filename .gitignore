@@ -1,3 +1,8 @@
 # Pasta local do Vercel CLI: guarda o id do projeto desta maquina.
 # Nao pertence ao repositorio.
 .vercel
+
+# O Vercel CLI escreve um VERCEL_OIDC_TOKEN aqui a cada deploy.
+# E credencial: nunca entra no repositorio.
+.env.local
+.env*.local
