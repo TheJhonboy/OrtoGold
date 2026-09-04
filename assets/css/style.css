@@ -1,0 +1,763 @@
+/* ============================================================
+   ORTOGOLD — folha de estilo
+   Azul #343A9B · Dourado #D9B75C · Amarelo #F5C62F · Grafite #151719
+   ============================================================ */
+
+:root {
+  --azul: #343a9b;
+  --azul-claro: #4a54c6;
+  --azul-fundo: #eef1ff;
+  --ouro: #d9b75c;
+  --ouro-claro: #f0d489;
+  --amarelo: #f5c62f;
+  --grafite: #151719;
+  --breu: #0a0e1f;
+  --breu-2: #121738;
+  --branco: #ffffff;
+  --cinza: #6b7280;
+  --cinza-claro: #f4f5f9;
+  --borda: #e3e6f2;
+  --zap: #25d366;
+
+  --display: 'Archivo', system-ui, sans-serif;
+  --corpo: 'Inter', system-ui, sans-serif;
+
+  --limite: 1180px;
+  --raio: 16px;
+  --raio-g: 24px;
+  --sombra: 0 18px 48px rgba(16, 22, 60, .1);
+  --sombra-forte: 0 24px 70px rgba(10, 14, 31, .28);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--corpo);
+  color: var(--grafite);
+  background: var(--branco);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img, svg, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+button { font: inherit; cursor: pointer; }
+
+.limite { width: 100%; max-width: var(--limite); margin-inline: auto; padding-inline: 20px; }
+
+.pular {
+  position: absolute; left: -9999px; top: 0; z-index: 999;
+  background: var(--azul); color: #fff; padding: 12px 20px; border-radius: 0 0 12px 0;
+}
+.pular:focus { left: 0; }
+
+:focus-visible { outline: 3px solid var(--ouro); outline-offset: 3px; border-radius: 6px; }
+
+/* ------------------------- TIPOGRAFIA ---------------------- */
+.titulo-gigante {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 8.2vw, 5.4rem);
+  line-height: .96;
+  letter-spacing: -.03em;
+  margin: 0 0 20px;
+  color: #fff;
+}
+.titulo-gigante .linha { display: block; }
+
+.linha--vazada {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--ouro);
+}
+@supports not (-webkit-text-stroke: 1px red) {
+  .linha--vazada { color: var(--ouro); }
+}
+
+.titulo-gigante--menor { font-size: clamp(2.1rem, 6.4vw, 4rem); }
+
+.titulo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4.2vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  margin: 0 0 14px;
+  color: var(--grafite);
+}
+.titulo--claro { color: #fff; }
+
+.sobrancelha {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--display); font-weight: 700;
+  font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--azul); margin: 0 0 14px;
+}
+.sobrancelha--claro { color: var(--ouro); }
+.sobrancelha__risco { width: 32px; height: 2px; background: currentColor; flex: none; border-radius: 2px; }
+
+.secao { padding: clamp(56px, 9vw, 104px) 0; }
+.secao__cabeca { max-width: 640px; margin-bottom: 40px; }
+.secao__texto { color: var(--cinza); font-size: 1.02rem; margin: 0 0 22px; }
+.secao__texto--claro { color: rgba(255,255,255,.82); }
+
+.link-ouro { color: var(--azul); font-weight: 600; border-bottom: 2px solid var(--ouro); }
+.link-ouro:hover { color: var(--azul-claro); }
+
+/* --------------------------- BOTÕES ------------------------ */
+.botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 46px; padding: 12px 22px;
+  border: 2px solid transparent; border-radius: 999px;
+  font-family: var(--display); font-weight: 700; font-size: .96rem;
+  background: var(--azul); color: #fff;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  cursor: pointer;
+}
+.botao:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(52,58,155,.3); }
+.botao:active { transform: translateY(0); }
+.botao--grande { min-height: 56px; padding: 16px 30px; font-size: 1.02rem; }
+.botao--zap { background: var(--zap); color: #05240f; }
+.botao--zap:hover { background: #1fbe5b; box-shadow: 0 12px 28px rgba(37,211,102,.34); }
+.botao--vazado { background: transparent; border-color: rgba(255,255,255,.45); color: #fff; }
+.botao--vazado:hover { border-color: var(--ouro); background: rgba(217,183,92,.12); box-shadow: none; }
+.botao--escuro { background: var(--grafite); }
+.botao__ico { width: 20px; height: 20px; flex: none; display: block; }
+/* Rótulo curto só existe no celular; ver o bloco de 860px. */
+.rotulo--curto { display: none; }
+.botao__ico svg { width: 100%; height: 100%; }
+
+/* -------------------------- CABEÇALHO ---------------------- */
+.topo {
+  position: sticky; top: 0; z-index: 60;
+  background: rgba(10,14,31,.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  transition: background .25s ease;
+}
+.topo--rolado { background: rgba(10,14,31,.96); }
+
+.topo__interno {
+  max-width: var(--limite); margin-inline: auto; padding: 12px 20px;
+  display: flex; align-items: center; gap: 20px;
+}
+
+.marca { display: flex; align-items: center; gap: 11px; color: #fff; }
+/* Símbolo OG oficial da marca. Fica sobre fundo escuro no
+   cabeçalho e no rodapé, por isso não leva caixa nem borda. */
+.marca__og { width: 40px; height: 40px; flex: none; object-fit: contain; }
+.marca__nome { font-family: var(--display); font-weight: 700; font-size: 1.16rem; letter-spacing: -.01em; }
+
+.menu { margin-left: auto; display: flex; gap: 26px; }
+.menu a { color: rgba(255,255,255,.78); font-weight: 400; font-size: .94rem; padding: 6px 0; position: relative; }
+.menu a::after {
+  content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 2px;
+  background: var(--ouro); transition: right .22s ease;
+}
+.menu a:hover { color: #fff; }
+.menu a:hover::after { right: 0; }
+
+.topo__zap { padding: 10px 17px; min-height: 42px; font-size: .87rem; white-space: nowrap; }
+
+.menu__abrir {
+  display: none; margin-left: auto;
+  width: 46px; height: 46px; border: 0; border-radius: 12px;
+  background: rgba(255,255,255,.09);
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.menu__abrir span { width: 20px; height: 2px; background: #fff; border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
+.menu__abrir[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu__abrir[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.menu__abrir[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* O painel do celular fica escondido por padrão.
+   Cuidado: se a regra base fosse `display: flex`, ela venceria o
+   atributo `hidden` do HTML e o painel apareceria aberto no
+   computador — foi exatamente o que aconteceu antes. */
+.menu-celular {
+  display: none; flex-direction: column; gap: 4px;
+  padding: 8px 20px 20px; border-top: 1px solid rgba(255,255,255,.08);
+}
+.menu-celular:not([hidden]) { display: flex; }
+.menu-celular a { color: rgba(255,255,255,.86); padding: 13px 0; font-weight: 400; }
+.menu-celular .botao { margin-top: 10px; }
+
+/* ---------------------------- TOPO ------------------------- */
+.hero { position: relative; background: var(--breu); }
+.hero__palco {
+  position: relative;
+  min-height: 100svh;
+  display: grid; align-items: center;
+  overflow: hidden;
+}
+.hero[data-filme="ativo"] { height: 520vh; }
+.hero[data-filme="ativo"] .hero__palco {
+  position: sticky; top: 0; height: 100svh; min-height: 0;
+}
+
+.hero__canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity .5s ease;
+}
+.hero[data-filme="ativo"] .hero__canvas { opacity: 1; }
+
+.hero__ambiente {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(80% 70% at 12% 88%, rgba(217,183,92,.14), transparent 60%),
+    linear-gradient(180deg, rgba(10,14,31,.62) 0%, rgba(10,14,31,.5) 40%, rgba(10,14,31,.92) 100%),
+    linear-gradient(150deg, #141829 0%, var(--breu) 62%);
+}
+/* Com o filme rodando o fundo é só sombra neutra: nada de cor
+   por cima, senão a imagem da fábrica perde o contraste. */
+.hero[data-filme="ativo"] .hero__ambiente {
+  background:
+    linear-gradient(180deg, rgba(8,10,20,.66) 0%, rgba(8,10,20,.30) 40%, rgba(8,10,20,.90) 100%);
+}
+.hero__ambiente::after {
+  content: ''; position: absolute; inset: 0;
+  box-shadow: inset 0 0 190px 60px rgba(10,14,31,.9);
+}
+
+.hero__conteudo {
+  position: relative; z-index: 2;
+  max-width: var(--limite); margin-inline: auto; width: 100%;
+  padding: 96px 20px 120px;
+}
+
+/* ------------- O TÍTULO SAI DE CENA ENQUANTO ROLA -----------
+   `--saida` é escrito pelo JavaScript a cada quadro: vai de 0
+   (começo da seção) a 1 (fim). O título e a seta somem no
+   primeiro terço, liberando a tela para o filme e para as
+   frases que entram depois.
+
+   `data-saiu` corta a visibilidade de vez. Sem isso os botões
+   continuariam recebendo Tab e clique mesmo invisíveis. */
+.hero[data-filme="ativo"] .hero__conteudo {
+  opacity: max(0, calc(1 - var(--saida, 0) / .32));
+  transform: translate3d(0, calc(var(--saida, 0) * -60px), 0);
+  will-change: opacity, transform;
+}
+.hero[data-filme="ativo"] .hero__rolar {
+  opacity: max(0, calc(1 - var(--saida, 0) / .18));
+  transform: translate3d(-50%, calc(var(--saida, 0) * -40px), 0);
+}
+.hero[data-filme="ativo"][data-saiu="sim"] .hero__conteudo,
+.hero[data-filme="ativo"][data-saiu="sim"] .hero__rolar { visibility: hidden; }
+.hero__texto { color: rgba(255,255,255,.78); font-size: 1.06rem; max-width: 44ch; margin: 0 0 28px; }
+.hero__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
+.hero__selos { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.selo {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 15px; border-radius: 999px;
+  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.16);
+  color: rgba(255,255,255,.9); font-size: .84rem; font-weight: 400;
+}
+.selo--ouro { border-color: rgba(217,183,92,.42); color: var(--ouro-claro); }
+.selo__ico { width: 17px; height: 17px; }
+.selo__ico svg { width: 100%; height: 100%; }
+.selo__ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--zap); flex: none; }
+.selo__ponto--off { background: #9aa0b4; }
+
+.hero__rolar {
+  position: absolute; left: 50%; bottom: 22px; z-index: 3; margin: 0;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px;
+  color: rgba(255,255,255,.55); font-size: .74rem;
+  letter-spacing: .18em; text-transform: uppercase; font-family: var(--display); font-weight: 700;
+}
+.hero__rolar span {
+  width: 22px; height: 34px; border: 2px solid rgba(255,255,255,.32); border-radius: 12px;
+  position: relative;
+}
+.hero__rolar span::after {
+  content: ''; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px;
+  border-radius: 2px; background: var(--ouro); transform: translateX(-50%);
+  animation: rolar 1.9s ease-in-out infinite;
+}
+@keyframes rolar { 0%,100% { transform: translate(-50%,0); opacity: 1; } 60% { transform: translate(-50%,10px); opacity: .2; } }
+
+.carimbo {
+  position: absolute; right: 26px; bottom: 26px; z-index: 3;
+  width: 106px; height: 106px; display: grid; place-items: center;
+}
+.carimbo svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: girar 22s linear infinite; }
+.carimbo text { font-family: var(--display); font-size: 9.4px; font-weight: 700; letter-spacing: .18em; fill: rgba(217,183,92,.85); }
+.carimbo__miolo { width: 30px; height: 30px; color: rgba(255,255,255,.7); }
+.carimbo__miolo svg { position: static; animation: none; width: 100%; height: 100%; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* -------------------------- DESTAQUES ---------------------- */
+.destaques { background: var(--branco); border-bottom: 1px solid var(--borda); }
+.destaques__grade {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  padding-block: 26px;
+}
+.destaque { display: flex; align-items: center; gap: 13px; padding: 12px 16px; }
+.destaque + .destaque { border-left: 1px solid var(--borda); }
+.destaque__ico {
+  width: 42px; height: 42px; flex: none; color: var(--azul);
+  background: var(--azul-fundo); border-radius: 12px; padding: 8px;
+}
+.destaque__ico svg { width: 100%; height: 100%; }
+.destaque strong { display: block; font-family: var(--display); font-size: .95rem; }
+.destaque span { display: block; font-size: .84rem; color: var(--cinza); }
+
+/* --------------------------- CATÁLOGO ---------------------- */
+.catalogo { display: grid; grid-template-columns: 232px 1fr; gap: 28px; align-items: start; }
+
+.abas { display: flex; flex-direction: column; gap: 8px; position: sticky; top: 84px; }
+.aba {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: var(--raio);
+  border: 1.5px solid var(--borda); background: #fff;
+  font-family: var(--display); font-weight: 700; font-size: .96rem; color: var(--grafite);
+  text-align: left; transition: all .18s ease;
+}
+.aba__ico { width: 26px; height: 26px; flex: none; color: var(--azul); }
+.aba__ico svg { width: 100%; height: 100%; }
+.aba:hover { border-color: var(--azul-claro); }
+.aba[aria-selected="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
+.aba[aria-selected="true"] .aba__ico { color: var(--ouro); }
+
+.produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+.produto {
+  display: flex; flex-direction: column;
+  border: 1.5px solid var(--borda); border-radius: var(--raio-g);
+  background: #fff; overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.produto:hover { transform: translateY(-4px); box-shadow: var(--sombra); border-color: transparent; }
+.produto__midia { position: relative; aspect-ratio: 4 / 3; background: var(--cinza-claro); overflow: hidden; }
+.produto__midia img, .produto__midia .ilustracao { width: 100%; height: 100%; object-fit: cover; }
+.produto__faixa {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  background: var(--amarelo); color: var(--grafite);
+  font-family: var(--display); font-weight: 800; font-size: .68rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 6px;
+}
+.produto__corpo { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.produto__nome { font-family: var(--display); font-weight: 700; font-size: 1.06rem; margin: 0; line-height: 1.2; }
+.produto__desc { font-size: .89rem; color: var(--cinza); margin: 0; flex: 1; }
+.produto__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.produto__tag {
+  font-size: .74rem; font-weight: 600; color: var(--azul);
+  background: var(--azul-fundo); padding: 4px 10px; border-radius: 999px;
+}
+.produto .botao { width: 100%; margin-top: 4px; }
+
+/* ------------------- SEÇÕES COM FILME ---------------------- */
+.filme-secao { position: relative; background: var(--breu); }
+.filme-secao__palco {
+  position: relative; min-height: 100svh;
+  display: grid; align-items: center; overflow: hidden;
+}
+.filme-secao[data-filme="ativo"] { height: 300vh; }
+.filme-secao[data-filme="ativo"] .filme-secao__palco { position: sticky; top: 0; height: 100svh; min-height: 0; }
+
+/* O trecho do quarto é mais alto que os outros de propósito: são
+   cinco frases para ler, e a altura da seção é o tempo que cada
+   uma fica na tela. Curto demais, a pessoa não termina de ler. */
+
+.filme-secao__canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity .5s ease;
+}
+.filme-secao[data-filme="ativo"] .filme-secao__canvas { opacity: 1; }
+
+.filme-secao__ambiente {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(105deg, rgba(10,14,31,.94) 0%, rgba(10,14,31,.72) 46%, rgba(10,14,31,.42) 100%),
+    linear-gradient(160deg, #171d47, var(--breu));
+}
+.filme-secao[data-filme="ativo"] .filme-secao__ambiente {
+  background: linear-gradient(105deg, rgba(10,14,31,.92) 0%, rgba(10,14,31,.66) 48%, rgba(10,14,31,.3) 100%);
+}
+.filme-secao--claro .filme-secao__ambiente {
+  background:
+    linear-gradient(180deg, rgba(10,14,31,.78), rgba(10,14,31,.6) 45%, rgba(10,14,31,.88)),
+    linear-gradient(160deg, #1d2450, var(--breu));
+}
+.filme-secao--claro[data-filme="ativo"] .filme-secao__ambiente {
+  background: linear-gradient(180deg, rgba(10,14,31,.72), rgba(10,14,31,.44) 45%, rgba(10,14,31,.86));
+}
+
+.filme-secao__conteudo { position: relative; z-index: 2; padding-block: 80px; }
+.filme-secao__conteudo--centro { text-align: center; max-width: 720px; }
+.filme-secao__conteudo--centro .sobrancelha { justify-content: center; }
+
+/* ---------------------- FRASES SOBRE O FILME ----------------
+   As frases ficam empilhadas na MESMA célula do grid, uma por
+   cima da outra. Assim a caixa já nasce com a altura da maior
+   frase e o texto não pula de lugar na hora da troca.
+
+   Some com `visibility` além do `opacity`: frase apagada não
+   pode ser lida por leitor de tela nem receber o Tab. O atraso
+   de meio segundo no `visibility` deixa o apagamento terminar
+   antes de ela sumir de vez.
+   ------------------------------------------------------------ */
+.cenas { display: grid; }
+.cena {
+  grid-area: 1 / 1;
+  opacity: 0; visibility: hidden;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity .5s ease,
+    transform .85s cubic-bezier(.16, .84, .28, 1),
+    visibility 0s linear .5s;
+}
+.cena[data-ativa="sim"] {
+  opacity: 1; visibility: visible; transform: none;
+  transition-delay: 0s, 0s, 0s;
+}
+.cena__titulo { margin: 0 0 14px; }
+.cena__texto { margin: 0 auto; max-width: 46ch; }
+.cena__acao { margin-top: 26px; }
+
+.cenas--hero {
+  position: absolute; inset: 0; z-index: 2;
+  place-items: center; align-content: center;
+  padding-inline: 20px; text-align: center;
+  pointer-events: none;
+}
+.cenas--hero .cena { max-width: 640px; }
+/* No topo a frase é a única coisa na tela, então ela vem maior —
+   é o momento de segurar a atenção de quem chegou. */
+.cenas--hero .cena__titulo { font-size: clamp(2.1rem, 5.6vw, 3.6rem); }
+.cenas--hero .cena__texto { font-size: 1.08rem; }
+
+/* Sem filme não existe rolagem dentro da seção para trocar as
+   frases. Nesse caso elas viram uma lista comum — senão a
+   última, que é a que tem o botão, nunca apareceria. */
+.filme-secao:not([data-filme="ativo"]) .cenas { gap: 44px; }
+.filme-secao:not([data-filme="ativo"]) .cena {
+  grid-area: auto;
+  opacity: 1; visibility: visible; transform: none;
+}
+.hero:not([data-filme="ativo"]) .cenas--hero { display: none; }
+
+.etapas__cabeca { max-width: 460px; margin-bottom: 30px; }
+.etapas { display: flex; flex-direction: column; gap: 4px; max-width: 560px; }
+
+.etapa {
+  display: grid; grid-template-columns: 40px 1fr; gap: 16px;
+  padding: 14px 18px; border-radius: var(--raio);
+  border: 1px solid transparent;
+  opacity: .38; transition: opacity .4s ease, background .4s ease, border-color .4s ease;
+}
+.etapa__num {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1.5px solid rgba(255,255,255,.28); color: rgba(255,255,255,.7);
+  font-family: var(--display); font-weight: 700; font-size: .86rem;
+  transition: all .4s ease;
+}
+.etapa strong { display: block; font-family: var(--display); font-size: 1.06rem; color: #fff; }
+.etapa p { margin: 3px 0 0; font-size: .9rem; color: rgba(255,255,255,.72); }
+
+.etapa--passou { opacity: .72; }
+.etapa--passou .etapa__num { border-color: var(--ouro); color: var(--ouro); }
+.etapa--atual {
+  opacity: 1;
+  background: rgba(255,255,255,.07);
+  border-color: rgba(217,183,92,.4);
+}
+.etapa--atual .etapa__num { background: var(--ouro); border-color: var(--ouro); color: var(--breu); }
+
+.etapas__barra {
+  margin-top: 22px; max-width: 560px; height: 4px; border-radius: 4px;
+  background: rgba(255,255,255,.14); overflow: hidden;
+}
+.etapas__barra span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--azul-claro), var(--ouro)); transition: width .15s linear; }
+
+/* -------------------------- CONSULTOR ---------------------- */
+.consultor { background: var(--cinza-claro); }
+.consultor__grade { display: grid; grid-template-columns: 1fr 380px; gap: 56px; align-items: center; }
+
+.lista-checada { display: grid; gap: 10px; margin: 0 0 26px; }
+.lista-checada li { position: relative; padding-left: 30px; font-size: .98rem; }
+.lista-checada li::before {
+  content: ''; position: absolute; left: 0; top: .38em;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--azul);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z' fill='%23000'/%3E%3C/svg%3E") center / 16px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z' fill='%23000'/%3E%3C/svg%3E") center / 16px no-repeat;
+}
+.consultor__horario { font-size: .88rem; color: var(--cinza); margin: 14px 0 0; }
+
+.consultor__cartao {
+  margin: 0; border-radius: var(--raio-g); overflow: hidden;
+  background: linear-gradient(165deg, var(--azul-claro), var(--azul) 55%, #232a72);
+  box-shadow: var(--sombra-forte);
+}
+.consultor__foto {
+  position: relative; aspect-ratio: 4 / 5;
+  display: grid; place-items: end center; overflow: hidden;
+}
+.consultor__foto::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(70% 60% at 50% 78%, rgba(217,183,92,.34), transparent 68%);
+}
+/* Com a foto de verdade do Gilson: ela preenche o quadro inteiro
+   e ganha um degradê por cima, que escurece o pé da imagem e
+   emenda no rodapé azul do cartão. Sem esse degradê a foto
+   termina numa linha reta e parece figurinha colada. */
+.consultor__foto img {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 50%;
+}
+.consultor__foto::after {
+  content: ''; position: absolute; inset: 0; z-index: 2;
+  background:
+    linear-gradient(to top, rgba(10, 14, 31, .62), rgba(10, 14, 31, .12) 38%, transparent 62%),
+    radial-gradient(78% 55% at 50% 4%, rgba(217, 183, 92, .2), transparent 70%);
+}
+/* O avatar desenhado (usado só se a foto sumir) fica na mesma
+   camada da foto, por baixo do degradê. */
+.consultor__foto svg { position: relative; z-index: 1; }
+.consultor__cartao figcaption {
+  padding: 20px 22px 24px; color: #fff;
+  background: rgba(10,14,31,.42); backdrop-filter: blur(6px);
+}
+.consultor__cartao strong { display: block; font-family: var(--display); font-size: 1.3rem; }
+.consultor__cartao span { display: block; font-size: .88rem; color: rgba(255,255,255,.75); }
+.consultor__zap { margin-top: 6px; color: var(--ouro-claro) !important; font-weight: 600; }
+
+/* ------------------------- DEPOIMENTOS --------------------- */
+.depoimentos__grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.depoimento {
+  border: 1.5px solid var(--borda); border-radius: var(--raio-g);
+  padding: 24px; background: #fff; display: flex; flex-direction: column; gap: 14px;
+}
+.depoimento__texto { margin: 0; font-size: .96rem; color: #3a3f4d; flex: 1; }
+.depoimento__pe { display: flex; align-items: center; gap: 12px; }
+.depoimento__iniciais {
+  width: 42px; height: 42px; border-radius: 50%; flex: none;
+  display: grid; place-items: center;
+  background: var(--azul); color: var(--ouro-claro);
+  font-family: var(--display); font-weight: 700; font-size: .92rem;
+}
+.depoimento__pe strong { display: block; font-size: .95rem; }
+.depoimento__pe small { color: var(--cinza); font-size: .8rem; }
+
+/* ---------------------------- REDES ------------------------ */
+.redes__grade { display: grid; grid-template-columns: 380px 1fr; gap: 48px; align-items: center; }
+.redes__grade-fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.redes__foto {
+  aspect-ratio: 1; border-radius: 14px; overflow: hidden;
+  background: var(--cinza-claro); border: 1px solid var(--borda);
+}
+.redes__foto img, .redes__foto .ilustracao { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------------------------- A CASA ----------------------- */
+.casa { background: var(--cinza-claro); }
+.casa__grade { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+
+.dado { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--borda); }
+.dado:first-of-type { border-top: 0; }
+.dado__ico { width: 40px; height: 40px; color: var(--azul); background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--borda); }
+.dado__ico svg { width: 100%; height: 100%; }
+.dado strong { font-family: var(--display); font-size: 1rem; display: block; margin-bottom: 4px; }
+.dado p { margin: 0 0 6px; color: var(--cinza); font-size: .95rem; }
+
+.horario li { display: flex; justify-content: space-between; gap: 16px; font-size: .92rem; color: var(--cinza); padding: 3px 0; max-width: 300px; }
+.horario li[data-hoje="sim"] { color: var(--grafite); font-weight: 600; }
+.horario li[data-hoje="sim"]::after { content: 'hoje'; font-size: .68rem; color: var(--ouro); text-transform: uppercase; letter-spacing: .1em; }
+
+.casa__mapa { border-radius: var(--raio-g); overflow: hidden; box-shadow: var(--sombra); background: #fff; min-height: 380px; display: grid; }
+.mapa-capa {
+  border: 0; width: 100%; min-height: 380px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  padding: 32px; text-align: center;
+  background:
+    radial-gradient(60% 60% at 50% 40%, rgba(52,58,155,.1), transparent 70%),
+    repeating-linear-gradient(45deg, #eef1ff 0 18px, #e6eaff 18px 36px);
+  color: var(--azul);
+}
+.mapa-capa__ico { width: 44px; height: 44px; }
+.mapa-capa__ico svg { width: 100%; height: 100%; }
+.mapa-capa strong { font-family: var(--display); font-size: 1.14rem; }
+.mapa-capa small { color: var(--cinza); max-width: 280px; font-size: .84rem; }
+.casa__mapa iframe { width: 100%; height: 100%; min-height: 380px; border: 0; display: block; }
+
+/* ------------------------ CHAMADA FINAL -------------------- */
+.chamada {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(90% 120% at 15% 15%, rgba(74,84,198,.44), transparent 60%),
+    radial-gradient(70% 90% at 88% 84%, rgba(217,183,92,.2), transparent 62%),
+    linear-gradient(150deg, #171d47, var(--breu));
+  padding: clamp(66px, 10vw, 120px) 0;
+}
+.chamada__interno { text-align: center; max-width: 760px; }
+.chamada__texto { color: rgba(255,255,255,.78); font-size: 1.05rem; margin: 0 auto 28px; max-width: 52ch; }
+
+/* --------------------------- RODAPÉ ------------------------ */
+.rodape { background: var(--breu); color: rgba(255,255,255,.72); padding: 56px 0 26px; }
+.rodape__grade { display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; gap: 40px; }
+.rodape strong { display: block; font-family: var(--display); color: #fff; margin-bottom: 14px; font-size: 1rem; }
+.rodape ul { display: grid; gap: 9px; font-size: .92rem; }
+.rodape a:hover { color: #fff; }
+.rodape__texto { font-size: .93rem; margin: 16px 0 0; }
+.marca--rodape { color: #fff; }
+.rodape__fim {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+  margin-top: 40px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.1);
+  font-size: .82rem; color: rgba(255,255,255,.5);
+}
+.rodape__credito strong { display: inline; color: var(--ouro-claro); }
+
+/* ----------------------- BOTÃO FLUTUANTE ------------------- */
+.flutuante {
+  position: fixed; right: 20px; bottom: 20px; z-index: 70;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 18px 10px 10px; border-radius: 999px;
+  background: rgba(10,14,31,.94); color: #fff;
+  border: 1px solid rgba(217,183,92,.4);
+  box-shadow: var(--sombra-forte);
+  transition: transform .2s ease;
+}
+.flutuante:hover { transform: translateY(-3px); }
+.flutuante__avatar {
+  width: 52px; height: 52px; flex: none; border-radius: 50%; overflow: hidden;
+  background: linear-gradient(160deg, var(--azul-claro), var(--azul));
+  border: 2px solid var(--ouro); display: grid; place-items: center;
+}
+.flutuante__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.flutuante__balao strong { display: block; font-family: var(--display); font-size: .95rem; }
+.flutuante__balao small { color: rgba(255,255,255,.62); font-size: .78rem; }
+.flutuante__zap { width: 26px; height: 26px; color: var(--zap); flex: none; }
+.flutuante__zap svg { width: 100%; height: 100%; }
+
+/* --------------------- BARRA FIXA CELULAR ------------------ */
+.barra-celular {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 75;
+  align-items: center; justify-content: space-between; gap: 14px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(10,14,31,.97);
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.barra-celular__texto strong { display: block; color: #fff; font-family: var(--display); font-size: .96rem; }
+.barra-celular__texto small { color: rgba(255,255,255,.6); font-size: .78rem; }
+
+/* ========================= RESPONSIVO ====================== */
+/* Entre 861px e 1100px o menu e o botão dividem pouco espaço.
+   Aperta os dois em vez de deixar quebrar linha. */
+@media (min-width: 861px) and (max-width: 1100px) {
+  .menu { gap: 18px; }
+  .menu a { font-size: .88rem; }
+  .topo__zap { font-size: .82rem; padding: 10px 14px; }
+}
+
+@media (max-width: 1040px) {
+  .catalogo { grid-template-columns: 1fr; }
+  .abas { flex-direction: row; overflow-x: auto; position: sticky; top: 68px; z-index: 20;
+          background: #fff; padding: 10px 0; margin-inline: -20px; padding-inline: 20px;
+          scrollbar-width: none; }
+  .abas::-webkit-scrollbar { display: none; }
+  .aba { flex: none; white-space: nowrap; }
+  .produtos { grid-template-columns: repeat(2, 1fr); }
+  .consultor__grade, .redes__grade, .casa__grade { grid-template-columns: 1fr; gap: 34px; }
+  .consultor__cartao { max-width: 380px; }
+  .depoimentos__grade { grid-template-columns: repeat(2, 1fr); }
+  .destaques__grade { grid-template-columns: repeat(2, 1fr); }
+  .destaque:nth-child(odd) + .destaque { border-left: 1px solid var(--borda); }
+  .destaque:nth-child(3), .destaque:nth-child(4) { border-top: 1px solid var(--borda); }
+  .rodape__grade { grid-template-columns: 1fr 1fr; }
+}
+
+/* No computador o painel do celular não existe, nem se algo o
+   destravar por engano. */
+@media (min-width: 861px) {
+  .menu-celular, .menu-celular:not([hidden]) { display: none !important; }
+}
+
+@media (max-width: 860px) {
+  .menu, .topo__zap { display: none; }
+  .menu__abrir { display: flex; }
+  .flutuante__balao { display: none; }
+  .flutuante { display: none; }
+  .barra-celular { display: flex; }
+  body { padding-bottom: 76px; }
+  .carimbo { display: none; }
+  .hero__conteudo { padding: 70px 20px 130px; }
+  .hero[data-filme="ativo"] { height: 460vh; }
+  .filme-secao[data-filme="ativo"] { height: 240vh; }
+  .cenas--hero .cena { max-width: 100%; }
+
+  /* No celular o título vinha travado no piso do clamp (2.6rem
+     = 41px numa tela de 375px) e estourava a linha. Aqui ele
+     volta a acompanhar a largura da tela, e o bloco inteiro vai
+     para o centro — em coluna estreita, texto centralizado lê
+     melhor do que texto alinhado à esquerda com sobra de um lado. */
+  /* ---------- O TOPO NO CELULAR É DO VÍDEO ----------
+     Numa tela de 375 px o texto e os botões em tamanho de
+     desktop tomavam quase a altura toda e o filme virava
+     papel de parede atrás de uma parede de conteúdo.
+     Aqui tudo encolhe e se junta num bloco só, no centro:
+     sobra imagem em cima e embaixo, que é o que se quer ver. */
+  .hero__conteudo { text-align: center; padding: 26px 14px 66px; }
+  .hero .titulo-gigante { font-size: clamp(1.7rem, 8.2vw, 2.4rem); letter-spacing: -.02em; margin-bottom: 12px; }
+  .hero .sobrancelha { justify-content: center; font-size: .6rem; letter-spacing: .1em; margin-bottom: 10px; }
+  .hero .sobrancelha__risco { width: 18px; }
+  .hero__texto { font-size: .84rem; line-height: 1.45; max-width: 34ch; margin: 0 auto 18px; color: rgba(255,255,255,.72); }
+
+  /* Botões lado a lado e baixos. Continuam com 44 px de altura
+     de toque — abaixo disso o dedo erra. */
+  .hero__acoes { justify-content: center; gap: 8px; flex-wrap: nowrap; margin-bottom: 14px; }
+  .hero__acoes .botao--grande {
+    min-height: 44px; padding: 10px 12px; font-size: .8rem; gap: 6px;
+    flex: 1 1 0; min-width: 0; white-space: nowrap;
+  }
+  .hero__acoes .rotulo { display: none; }
+  .hero__acoes .rotulo--curto { display: inline; }
+  .hero__acoes .botao__ico { width: 16px; height: 16px; }
+
+  /* Selos viram etiquetas mínimas: o ponto verde e o ícone já
+     dizem "aberto" e "fábrica própria" sem ocupar duas linhas. */
+  .hero__selos { justify-content: center; gap: 7px; }
+  .hero__selos .selo { padding: 4px 10px; font-size: .68rem; gap: 5px; }
+  .hero__selos .selo__ico { width: 13px; height: 13px; }
+  .hero__selos .selo__ponto { width: 6px; height: 6px; }
+
+  /* O vídeo é 16:9 deitado; numa tela em pé sobra pouco quadro
+     e o texto caía em cima da parte clara da cama. Escurece mais
+     o fundo no celular para o título continuar legível. */
+  /* Sombra só nas pontas: o miolo do quadro fica limpo. */
+  .hero[data-filme="ativo"] .hero__ambiente {
+    background:
+      linear-gradient(180deg, rgba(8,10,20,.62) 0%, rgba(8,10,20,.16) 42%, rgba(8,10,20,.20) 62%, rgba(8,10,20,.88) 100%);
+  }
+  .hero__ambiente::after { box-shadow: inset 0 0 120px 30px rgba(8,10,20,.75); }
+  .hero__canvas { object-position: 50% 38%; }
+}
+
+@media (max-width: 560px) {
+  .produtos { grid-template-columns: 1fr; }
+  .depoimentos__grade { grid-template-columns: 1fr; }
+  .destaques__grade { grid-template-columns: 1fr; }
+  .destaque + .destaque { border-left: 0 !important; border-top: 1px solid var(--borda); }
+  .rodape__grade { grid-template-columns: 1fr; gap: 30px; }
+  .redes__grade-fotos { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .hero__acoes .botao { width: 100%; }
+}
+
+/* ------------------- MOVIMENTO REDUZIDO -------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

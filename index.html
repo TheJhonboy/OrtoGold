@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OrtoGold — Fábrica de colchões e móveis em Goiânia</title>
+<meta name="description" content="Fábrica própria de colchões, camas box, cabeceiras e móveis para quarto no Setor Grajaú, Goiânia. Fale direto com o consultor Gilson pelo WhatsApp.">
+<meta name="theme-color" content="#0b1020">
+<link rel="canonical" href="https://loja-de-estofados.vercel.app/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrtoGold">
+<meta property="og:title" content="OrtoGold — Fábrica de colchões e móveis em Goiânia">
+<meta property="og:description" content="Direto de quem produz. Colchões, camas box, cabeceiras e móveis sob medida. Fale com o Gilson.">
+<meta property="og:url" content="https://loja-de-estofados.vercel.app/">
+<meta property="og:image" content="https://loja-de-estofados.vercel.app/assets/img/og-social.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/simbolo.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/img/favicon-512.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;600&display=swap">
+<!-- Rede de segurança. Estas regras viajam dentro do HTML, que o
+     navegador nunca guarda por dias — ao contrário do style.css.
+     Se um visitante antigo abrir a página com o CSS velho ainda
+     na memória, as frases do filme empilhariam dentro de um
+     palco de uma tela só, e ele veria um tapume escuro gigante
+     no lugar da seção. Já aconteceu. Com isto aqui, o pior caso
+     é a página ficar sem enfeite — nunca em branco. -->
+<style>
+  /* Tela de carregamento. Some sozinha em 9 s no pior caso. */
+  .carregando {
+    position: fixed; inset: 0; z-index: 200;
+    display: grid; place-content: center; justify-items: center; gap: 20px;
+    background: #0A0E1F;
+    transition: opacity .45s ease, visibility .45s ease;
+  }
+  .carregando--fim { opacity: 0; visibility: hidden; pointer-events: none; }
+  .carregando__marca {
+    display: flex; align-items: center; gap: 12px; color: #fff;
+    font-family: Archivo, "Segoe UI", system-ui, sans-serif;
+    font-weight: 800; font-size: 1.55rem; letter-spacing: -.01em;
+  }
+  .carregando__barra {
+    width: min(240px, 62vw); height: 6px; border-radius: 999px;
+    background: rgba(255,255,255,.13); overflow: hidden;
+  }
+  .carregando__barra span {
+    display: block; width: 0; height: 100%; border-radius: 999px;
+    background: #25D366; transition: width .3s ease;
+  }
+  .carregando__texto {
+    margin: 0; font-size: .8rem; color: rgba(255,255,255,.45);
+    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  }
+  body.carregando-ativo { overflow: hidden; }
+
+  .cenas { display: grid; }
+  .cena { grid-area: 1 / 1; }
+  .cena:not([data-ativa="sim"]) { opacity: 0; visibility: hidden; }
+</style>
+<noscript><style>.carregando{display:none}</style></noscript>
+
+<link rel="stylesheet" href="assets/css/style.css?v=26f2388e">
+
+<!-- Primeiro quadro do filme do topo: sem isso o hero pisca escuro
+     por um instante antes do canvas receber a primeira imagem. -->
+<link rel="preload" as="image" href="assets/video/hero-cartaz.webp" type="image/webp">
+</head>
+<body>
+
+<div class="carregando" id="carregando" role="status" aria-live="polite" aria-label="Carregando o site">
+  <span class="carregando__marca">
+    <img src="assets/img/simbolo.svg" alt="" width="40" height="40">
+    OrtoGold
+  </span>
+  <span class="carregando__barra"><span id="carregando-progresso"></span></span>
+  <p class="carregando__texto">Carregando…</p>
+</div>
+
+<a class="pular" href="#catalogo">Pular para o catálogo</a>
+
+<!-- ============================ CABEÇALHO ============================ -->
+<header class="topo" id="topo">
+  <div class="topo__interno">
+    <a class="marca" href="#topo" aria-label="OrtoGold, início">
+      <img class="marca__og" src="assets/img/simbolo-claro.svg" alt="" width="40" height="40">
+      <span class="marca__nome">OrtoGold</span>
+    </a>
+
+    <nav class="menu" aria-label="Navegação principal">
+      <a href="#catalogo">Produtos</a>
+      <a href="#fabrica">A fábrica</a>
+      <a href="#consultor">Atendimento</a>
+      <a href="#casa">Onde estamos</a>
+    </nav>
+
+    <a class="botao botao--zap topo__zap" data-zap="topo" href="#" rel="noopener">
+      <span class="botao__ico" data-icone="whatsapp"></span>
+      <span>Fale com o consultor Gilson</span>
+    </a>
+
+    <button class="menu__abrir" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-celular">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="menu-celular" id="menu-celular" hidden>
+    <a href="#catalogo">Produtos</a>
+    <a href="#fabrica">A fábrica</a>
+    <a href="#consultor">Atendimento</a>
+    <a href="#casa">Onde estamos</a>
+    <a class="botao botao--zap" data-zap="menu" href="#">Fale com o consultor Gilson</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================== TOPO =============================== -->
+<section class="hero" id="hero" data-filme="estatico">
+  <div class="hero__palco">
+    <video class="hero__canvas" id="hero-video" aria-hidden="true"
+           muted playsinline webkit-playsinline preload="auto"
+           data-movel="assets/video/hero-scroll-720.mp4"
+           poster="assets/video/hero-cartaz.webp">
+      <source src="assets/video/hero-scroll.mp4" type="video/mp4">
+    </video>
+    <div class="hero__ambiente" aria-hidden="true"></div>
+
+    <div class="hero__conteudo">
+      <p class="sobrancelha"><span class="sobrancelha__risco"></span>Fábrica própria · Setor Grajaú, Goiânia</p>
+
+      <h1 class="titulo-gigante">
+        <span class="linha">Seu próximo</span>
+        <span class="linha linha--vazada">colchão</span>
+        <span class="linha">nasce aqui.</span>
+      </h1>
+
+      <p class="hero__texto">
+        Não somos revenda. Colchões, camas box, cabeceiras e móveis feitos na
+        nossa fábrica em Goiânia — e entregues direto no seu quarto.
+      </p>
+
+      <div class="hero__acoes">
+        <a class="botao botao--zap botao--grande" data-zap="hero" href="#">
+          <span class="botao__ico" data-icone="whatsapp"></span>
+          <!-- Dois rótulos, um só visível: no celular o texto longo
+               quebrava em duas linhas e dobrava a altura do botão. -->
+          <span class="rotulo">Fale com o consultor Gilson</span>
+          <span class="rotulo rotulo--curto">Falar com o Gilson</span>
+        </a>
+        <a class="botao botao--vazado botao--grande" href="#catalogo">
+          <span class="rotulo">Ver o que fabricamos</span>
+          <span class="rotulo rotulo--curto">Ver produtos</span>
+        </a>
+      </div>
+
+      <div class="hero__selos">
+        <span class="selo" id="selo-aberto" hidden></span>
+        <span class="selo selo--ouro">
+          <span class="selo__ico" data-icone="fabrica"></span>
+          Fabricação própria
+        </span>
+      </div>
+    </div>
+
+    <!-- Frases que entram por cima do filme depois que o título
+         do topo sai de cena. Só existem quando o filme roda: sem
+         filme não há rolagem aqui dentro para disparar a troca,
+         e o topo já diz tudo sozinho. -->
+    <div class="cenas cenas--hero" id="cenas-hero"></div>
+
+    <p class="hero__rolar" aria-hidden="true"><span></span>Role para ver</p>
+
+    <div class="carimbo" aria-hidden="true">
+      <svg viewBox="0 0 120 120">
+        <defs><path id="circ" d="M60,60 m-42,0 a42,42 0 1,1 84,0 a42,42 0 1,1 -84,0"/></defs>
+        <text><textPath href="#circ">CONFORTO QUE VEM DA FÁBRICA · ORTOGOLD GOIÂNIA · </textPath></text>
+      </svg>
+      <span class="carimbo__miolo" data-icone="colchao"></span>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== DESTAQUES ============================= -->
+<section class="destaques" aria-label="Diferenciais da OrtoGold">
+  <div class="limite destaques__grade" id="destaques-grade"></div>
+</section>
+
+<!-- ============================ CATÁLOGO ============================= -->
+<section class="secao" id="catalogo">
+  <div class="limite">
+    <header class="secao__cabeca">
+      <p class="sobrancelha"><span class="sobrancelha__risco"></span>Catálogo</p>
+      <h2 class="titulo">O que a gente fabrica</h2>
+      <p class="secao__texto">
+        Cada peça sai sob medida e com acabamento conferido. Escolheu o que
+        quer? Manda pro Gilson que ele monta o orçamento com você.
+      </p>
+    </header>
+
+    <div class="catalogo">
+      <div class="abas" id="abas" role="tablist" aria-label="Categorias de produto"></div>
+      <div class="produtos" id="produtos"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= FÁBRICA ============================= -->
+<section class="filme-secao" id="fabrica" data-filme="estatico">
+  <div class="filme-secao__palco">
+    <video class="filme-secao__canvas" id="fabrica-video" aria-hidden="true"
+           muted playsinline webkit-playsinline preload="auto"
+           data-movel="assets/video/fabrica-scroll-720.mp4"
+           poster="assets/video/fabrica-cartaz.webp">
+      <source src="assets/video/fabrica-scroll.mp4" type="video/mp4">
+    </video>
+    <div class="filme-secao__ambiente" aria-hidden="true"></div>
+
+    <div class="limite filme-secao__conteudo">
+      <div class="etapas__cabeca">
+        <p class="sobrancelha sobrancelha--claro"><span class="sobrancelha__risco"></span>Dentro da fábrica</p>
+        <h2 class="titulo titulo--claro">Como seu colchão<br>é feito</h2>
+      </div>
+      <ol class="etapas" id="etapas"></ol>
+      <div class="etapas__barra" aria-hidden="true"><span id="etapas-progresso"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CONSULTOR ============================ -->
+<section class="secao consultor" id="consultor">
+  <div class="limite consultor__grade">
+    <div class="consultor__texto">
+      <p class="sobrancelha"><span class="sobrancelha__risco"></span>Atendimento</p>
+      <h2 class="titulo">Você fala com o Gilson.<br>Não com um robô.</h2>
+      <p class="secao__texto">
+        Nada de formulário que ninguém responde. O Gilson atende no WhatsApp,
+        entende o que você precisa, confere a medida da sua cama e monta o
+        orçamento com você — item por item.
+      </p>
+
+      <ul class="lista-checada">
+        <li>Orçamento sem compromisso</li>
+        <li>Ele confere a medida antes de fechar</li>
+        <li>Condição de pagamento combinada na conversa</li>
+        <li>Entrega em Goiânia e região combinada direto com ele</li>
+      </ul>
+
+      <a class="botao botao--zap botao--grande" data-zap="consultor" href="#">
+        <span class="botao__ico" data-icone="whatsapp"></span>
+        <span>Chamar o Gilson agora</span>
+      </a>
+      <p class="consultor__horario" id="consultor-horario"></p>
+    </div>
+
+    <figure class="consultor__cartao">
+      <div class="consultor__foto" id="gilson-corpo"></div>
+      <figcaption>
+        <strong>Gilson</strong>
+        <span>Consultor de vendas · OrtoGold</span>
+        <span class="consultor__zap" id="consultor-numero"></span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- =========================== DEPOIMENTOS =========================== -->
+<section class="secao depoimentos" id="depoimentos" hidden>
+  <div class="limite">
+    <header class="secao__cabeca">
+      <p class="sobrancelha"><span class="sobrancelha__risco"></span>Quem já comprou</p>
+      <h2 class="titulo">O que dizem por aí</h2>
+    </header>
+    <div class="depoimentos__grade" id="depoimentos-grade"></div>
+  </div>
+</section>
+
+<!-- ============================== REDES ============================== -->
+<section class="secao redes" id="redes">
+  <div class="limite redes__grade">
+    <div class="redes__perfil">
+      <p class="sobrancelha"><span class="sobrancelha__risco"></span>Nas redes</p>
+      <h2 class="titulo">Acompanhe a OrtoGold</h2>
+      <p class="secao__texto">
+        Novidades, modelos que acabaram de sair da fábrica e os quartos que a
+        gente montou pelos clientes de Goiânia.
+      </p>
+      <a class="botao botao--escuro" id="link-instagram" href="#" target="_blank" rel="noopener">
+        <span class="botao__ico" data-icone="instagram"></span>
+        <span id="arroba-instagram">@orto.gold</span>
+      </a>
+    </div>
+    <div class="redes__grade-fotos" id="grade-instagram"></div>
+  </div>
+</section>
+
+<!-- ============================= A CASA ============================== -->
+<section class="secao casa" id="casa">
+  <div class="limite casa__grade">
+    <div class="casa__dados">
+      <p class="sobrancelha"><span class="sobrancelha__risco"></span>Onde estamos</p>
+      <h2 class="titulo">Nossa fábrica</h2>
+
+      <div class="dado">
+        <span class="dado__ico" data-icone="pino"></span>
+        <div>
+          <strong>Endereço</strong>
+          <p id="casa-endereco"></p>
+          <a id="casa-rota" class="link-ouro" href="#" target="_blank" rel="noopener">Traçar rota</a>
+        </div>
+      </div>
+
+      <div class="dado">
+        <span class="dado__ico" data-icone="relogio"></span>
+        <div>
+          <strong>Horário</strong>
+          <ul class="horario" id="casa-horario"></ul>
+        </div>
+      </div>
+
+      <div class="dado">
+        <span class="dado__ico" data-icone="whatsapp"></span>
+        <div>
+          <strong>WhatsApp</strong>
+          <p><a class="link-ouro" data-zap="casa" href="#" id="casa-zap"></a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="casa__mapa">
+      <button class="mapa-capa" type="button" id="abrir-mapa">
+        <span class="mapa-capa__ico" data-icone="pino"></span>
+        <strong>Ver no mapa</strong>
+        <small>O mapa carrega só quando você clicar — assim a página abre rápido.</small>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== CHAMADA FINAL ========================== -->
+<section class="chamada" id="chamada">
+  <div class="limite chamada__interno">
+    <h2 class="titulo-gigante titulo-gigante--menor">
+      <span class="linha">Dormir bem</span>
+      <span class="linha linha--vazada">não custa</span>
+      <span class="linha">o que você pensa.</span>
+    </h2>
+    <p class="chamada__texto">
+      Manda uma mensagem pro Gilson, conta o que você precisa e ele te passa a
+      condição. Sem compromisso, sem enrolação.
+    </p>
+    <a class="botao botao--zap botao--grande" data-zap="final" href="#">
+      <span class="botao__ico" data-icone="whatsapp"></span>
+      <span>Fale com o consultor Gilson</span>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================== RODAPÉ ============================= -->
+<footer class="rodape">
+  <div class="limite rodape__grade">
+    <div>
+      <a class="marca marca--rodape" href="#topo">
+        <img class="marca__og" src="assets/img/simbolo-claro.svg" alt="" width="40" height="40">
+        <span class="marca__nome">OrtoGold</span>
+      </a>
+      <p class="rodape__texto">Fábrica de colchões e móveis para quarto.<br>Goiânia — Goiás.</p>
+    </div>
+
+    <nav aria-label="Rodapé">
+      <strong>Produtos</strong>
+      <ul id="rodape-categorias"></ul>
+    </nav>
+
+    <div>
+      <strong>Contato</strong>
+      <ul class="rodape__contato">
+        <li id="rodape-endereco"></li>
+        <li><a class="link-ouro" data-zap="rodape" href="#" id="rodape-zap"></a></li>
+        <li><a class="link-ouro" id="rodape-instagram" href="#" target="_blank" rel="noopener">@orto.gold</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="limite rodape__fim">
+    <span>© <span id="ano"></span> OrtoGold. Todos os direitos reservados.</span>
+    <span class="rodape__credito">Site por <strong>Jhon</strong> · Automação e sites para negócios locais</span>
+  </div>
+</footer>
+
+<!-- ====================== BOTÃO FLUTUANTE GILSON ===================== -->
+<a class="flutuante" data-zap="flutuante" href="#" aria-label="Falar com o Gilson no WhatsApp">
+  <span class="flutuante__avatar" id="gilson-rosto"></span>
+  <span class="flutuante__balao">
+    <strong>Fale com o Gilson</strong>
+    <small>Consultor OrtoGold</small>
+  </span>
+  <span class="flutuante__zap" data-icone="whatsapp"></span>
+</a>
+
+<!-- ======================= BARRA FIXA NO CELULAR ===================== -->
+<div class="barra-celular">
+  <div class="barra-celular__texto">
+    <strong>Consultor Gilson</strong>
+    <small id="barra-status"></small>
+  </div>
+  <a class="botao botao--zap" data-zap="barra" href="#">
+    <span class="botao__ico" data-icone="whatsapp"></span>
+    <span>WhatsApp</span>
+  </a>
+</div>
+
+<script src="assets/js/carregando.js?v=811879b2"></script>
+<script src="assets/js/dados.js?v=b2dff607"></script>
+<script src="assets/js/ilustracoes.js?v=55dab4bb"></script>
+<script src="assets/js/filme-scroll.js?v=49536d13"></script>
+<script src="assets/js/filme-video.js?v=a1515f3e"></script>
+<script src="assets/js/main.js?v=9af63d59"></script>
+</body>
+</html>
