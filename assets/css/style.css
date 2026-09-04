@@ -446,7 +446,12 @@ button { font: inherit; cursor: pointer; }
       calc(var(--u, 0) * -1 * var(--alcance, 380px)),
       calc(var(--u, 0) * var(--u, 0) * -260px)
     )
-    rotateX(calc(var(--u, 0) * 44deg));
+    rotateX(calc(var(--u, 0) * 44deg))
+    /* Quem está longe do centro encolhe. Serve a dois propósitos: dá a
+       leitura de profundidade — o produto da vez é o grande — e evita
+       que dois cartões seguidos se atropelem quando o palco é baixo,
+       como no celular. */
+    scale(calc(1 - var(--au, 0) * var(--encolhe, .18)));
   opacity: var(--o, 1);
   will-change: transform, opacity;
   box-shadow: var(--sombra-forte);
@@ -875,6 +880,45 @@ button { font: inherit; cursor: pointer; }
      largura das categorias. O trilho fica, mostrando onde a pessoa está. */
   .abas-seta { display: none; }
   .abas-trilho { width: 100%; }
+
+  /* ---- VITRINE NO CELULAR ----
+     Numa tela de 812px o cabeçalho comia 347px e sobravam 394px de
+     palco para um cartão de 346px: dois cartões seguidos se atropelavam.
+     Aqui o cabeçalho aperta, o cartão encurta e quem está fora do
+     centro encolhe mais, para o produto da vez ficar sozinho grande. */
+  .vitrine[data-palco="ativo"] .vitrine__palco { --encolhe: .34; }
+
+  /* A barra do WhatsApp é fixa no pé da tela e tapava o rodapé do cartão
+     que estava passando. O palco termina acima dela. */
+  .vitrine[data-palco="ativo"] .vitrine__fixo {
+    height: calc(100vh - var(--altura-topo, 68px) - 76px);
+  }
+
+  .vitrine[data-palco="ativo"] .secao__cabeca { margin-bottom: 14px; }
+  .vitrine[data-palco="ativo"] .secao__cabeca .titulo { font-size: 1.75rem; }
+  .vitrine[data-palco="ativo"] .secao__cabeca .secao__texto {
+    font-size: .86rem; margin-bottom: 0;
+    /* Duas linhas bastam para situar; o texto inteiro já foi lido antes
+       de a seção prender. */
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .vitrine[data-palco="ativo"] .catalogo { gap: 14px; }
+  .vitrine[data-palco="ativo"] .produto__midia { aspect-ratio: 16 / 9; }
+  .vitrine[data-palco="ativo"] .produto__corpo { padding: 14px; gap: 8px; }
+  .vitrine[data-palco="ativo"] .produto__desc {
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* Uma fileira de tamanhos só. O cartão precisa caber no palco inteiro,
+     e a lista completa de medidas continua na grade, para quem chega com
+     movimento reduzido. */
+  .vitrine[data-palco="ativo"] .produto__tags {
+    max-height: 26px; overflow: hidden;
+  }
+  /* Precisa do [data-palco] para empatar com a regra do trilho, senão a
+     largura de lá vence esta. */
+  .vitrine[data-palco="ativo"] .produto[data-palco] { width: min(300px, 80vw); }
   .depoimentos__grade { grid-template-columns: 1fr; }
   .destaques__grade { grid-template-columns: 1fr; }
   .destaque + .destaque { border-left: 0 !important; border-top: 1px solid var(--borda); }

@@ -27,8 +27,19 @@
   'use strict';
 
   /* Quanto de `u` separa um cartão do seguinte. Menor que 1 mantém
-     sempre dois na tela ao mesmo tempo, que é o efeito pedido. */
-  const ESPACAMENTO = 0.85;
+     sempre dois na tela ao mesmo tempo, que é o efeito pedido.
+
+     No celular o cartão é quase tão alto quanto o palco inteiro, então
+     com o espaçamento do computador os vizinhos cobriam o do meio. Lá
+     eles andam mais afastados — mas não tanto que saiam de cena: acima
+     de 1.22 a opacidade zera e só sobraria um cartão na tela. */
+  const ESPACAMENTO_LARGO = 0.85;
+  const ESPACAMENTO_ESTREITO = 1.0;
+  const LARGURA_ESTREITA = 560;
+
+  function espacamento() {
+    return global.innerWidth <= LARGURA_ESTREITA ? ESPACAMENTO_ESTREITO : ESPACAMENTO_LARGO;
+  }
 
   /* Em que ponto do trilho o primeiro cartão nasce. Não é 1 — na ponta
      ele estaria quase transparente, e quem troca de categoria abriria a
@@ -89,7 +100,10 @@
     /* O percurso total em unidades de `u`: o primeiro cartão nasce em
        NASCE_EM e o último morre em -1, com os outros escalonados no
        meio. */
-    this.percurso = (this.cartoes.length - 1) * ESPACAMENTO + NASCE_EM + 1;
+    /* Guardado na instância: o espaçamento muda com a largura da tela, e
+       o percurso tem que casar com o que a pintura vai usar. */
+    this.espacamento = espacamento();
+    this.percurso = (this.cartoes.length - 1) * this.espacamento + NASCE_EM + 1;
 
     this.cartoes.forEach((cartao) => {
       cartao.dataset.palco = '';
@@ -149,7 +163,7 @@
     if (this.grade) {
       Array.from(this.grade.children).forEach((cartao) => {
         delete cartao.dataset.palco;
-        ['--u', '--o', 'z-index'].forEach((nome) => cartao.style.removeProperty(nome));
+        ['--u', '--au', '--o', 'z-index'].forEach((nome) => cartao.style.removeProperty(nome));
       });
     }
     this.cartoes = [];
@@ -176,7 +190,13 @@
 
     /* Quanto o cartão anda para o lado no mesmo percurso. Sem isso a
        descida vira elevador; a diagonal é o que dá o movimento. */
-    const desvio = Math.min(300, Math.round(this.palco.clientWidth * 0.24));
+    /* Na tela estreita o cartão ocupa quase a largura toda, e um desvio
+       pequeno deixaria o vizinho atrás em vez de ao lado. Lá ele sai
+       bem mais para o canto, que é o que faz o do meio respirar. */
+    const estreito = global.innerWidth <= LARGURA_ESTREITA;
+    const desvio = estreito
+      ? Math.round(this.palco.clientWidth * 0.46)
+      : Math.min(300, Math.round(this.palco.clientWidth * 0.24));
     this.palco.style.setProperty('--desvio', desvio + 'px');
   };
 
@@ -244,7 +264,7 @@
     if (!this.cartoes.length) return;
 
     this.cartoes.forEach((cartao, i) => {
-      const u = NASCE_EM + i * ESPACAMENTO - p * this.percurso;
+      const u = NASCE_EM + i * this.espacamento - p * this.percurso;
       const preso = limitar(u, -1.35, 1.35);
 
       /* Some antes de chegar à borda: cartão sumindo no meio do nada é
@@ -252,6 +272,9 @@
       const opacidade = limitar(1 - (Math.abs(preso) - 0.72) / 0.5, 0, 1);
 
       cartao.style.setProperty('--u', preso.toFixed(4));
+      /* O CSS não sabe tirar módulo, e ele precisa disso para encolher o
+         cartão igual dos dois lados do trilho. */
+      cartao.style.setProperty('--au', Math.abs(preso).toFixed(4));
       cartao.style.setProperty('--o', opacidade.toFixed(3));
       /* Quem está mais perto do meio passa na frente. */
       cartao.style.zIndex = String(Math.round(100 - Math.abs(preso) * 50));
