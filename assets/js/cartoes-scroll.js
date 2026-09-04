@@ -1,17 +1,18 @@
 /* ============================================================
    VITRINE — OS PRODUTOS PASSAM COM O SCROLL
    ------------------------------------------------------------
-   A seção trava na tela e os cartões sobem por um trilho: entram
-   por baixo tortos, endireitam ao cruzar o meio e saem por cima
-   tortos de novo, afastando da câmera nas duas pontas. Dois ficam
-   legíveis por vez — um embaixo, outro em cima — e a cada trecho
-   de rolagem sobe o próximo.
+   A seção trava na tela e os cartões descem na diagonal: entram
+   pelo canto de cima à direita deitados, endireitam ao cruzar o
+   meio colados na câmera, e saem pelo canto de baixo à esquerda
+   deitados para o outro lado. Dois ficam legíveis por vez — um
+   em cima, outro embaixo — e a cada trecho de rolagem desce o
+   próximo.
 
    Cada cartão tem uma posição no trilho, o `u`:
 
-       u = +1   acabou de entrar, embaixo, deitado para trás
+       u = +1   entrando, em cima à direita, deitado
        u =  0   no meio da tela, reto, colado na câmera
-       u = -1   saindo por cima, deitado para frente
+       u = -1   saindo, embaixo à esquerda, deitado
 
    Quem move é o CSS. Aqui só se escreve `u` e a opacidade de cada
    cartão, uma vez por quadro.
@@ -116,8 +117,13 @@
     const tela = global.innerHeight;
     const curso = this.cartoes.length * TELAS_POR_CARTAO * tela;
     this.secao.style.height = Math.round(tela + curso) + 'px';
-    /* O quanto o cartão sobe entre uma ponta e outra do trilho. */
+
+    /* Quanto o cartão desce entre uma ponta e outra do trilho... */
     this.palco.style.setProperty('--alcance', Math.round(tela * 0.62) + 'px');
+    /* ...e quanto ele anda para o lado no mesmo percurso. Sem isso a
+       descida vira elevador; a diagonal é o que dá o movimento. */
+    const desvio = Math.min(300, Math.round(this.palco.clientWidth * 0.24));
+    this.palco.style.setProperty('--desvio', desvio + 'px');
   };
 
   Vitrine.prototype.agendar = function () {

@@ -403,9 +403,17 @@ button { font: inherit; cursor: pointer; }
   transform-style: preserve-3d;
 }
 
-/* O trilho. `u` vai de +1 (entrando por baixo, deitado para trás) a
-   -1 (saindo por cima, deitado para frente), passando reto e colado na
-   câmera no zero. O z usa u² para afastar nas duas pontas por igual.
+/* O trilho, medido no site de referência: o cartão entra pelo canto de
+   cima à direita deitado, desce na diagonal passando reto e colado na
+   câmera no meio da tela, e sai pelo canto de baixo à esquerda deitado
+   para o outro lado.
+
+       u = +1   em cima, à direita, deitado
+       u =  0   no meio, reto, perto da câmera
+       u = -1   embaixo, à esquerda, deitado
+
+   O y é invertido de propósito: u positivo é topo, e no CSS topo é y
+   negativo. O z usa u² para afastar nas duas pontas por igual.
 
    O seletor é longo de propósito: precisa vencer o `.produto:hover`,
    que senão empurraria o cartão para fora da posição calculada. */
@@ -415,11 +423,11 @@ button { font: inherit; cursor: pointer; }
   transform:
     translate(-50%, -50%)
     translate3d(
-      calc(var(--u, 0) * 70px),
-      calc(var(--u, 0) * var(--alcance, 380px)),
+      calc(var(--u, 0) * var(--desvio, 240px)),
+      calc(var(--u, 0) * -1 * var(--alcance, 380px)),
       calc(var(--u, 0) * var(--u, 0) * -260px)
     )
-    rotateX(calc(var(--u, 0) * -44deg));
+    rotateX(calc(var(--u, 0) * 44deg));
   opacity: var(--o, 1);
   will-change: transform, opacity;
   box-shadow: var(--sombra-forte);
