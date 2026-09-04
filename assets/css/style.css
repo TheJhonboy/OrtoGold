@@ -382,7 +382,33 @@ button { font: inherit; cursor: pointer; }
 }
 .abas-trilho.esta-arrastando .abas-trilho__bolinha { background: var(--azul-claro); }
 
-.produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+/* A perspectiva mora na grade, não no cartão: assim todos os cartões
+   dividem o mesmo ponto de fuga e a fileira parece uma cena só, em vez
+   de cada um ter a própria câmera. */
+.produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; perspective: 1600px; }
+
+/* Os cartões saem para fora da grade enquanto entram. O clip corta essa
+   sobra sem criar barra de rolagem nem virar container de scroll — o
+   overflow: auto quebraria o sticky da faixa de categorias. */
+#catalogo { overflow-x: clip; }
+
+/* O estado natural do cartão é assentado. O JS só acrescenta o data-voa
+   e vai escrevendo --p de 0 (longe e torto) a 1 (no lugar). Sem JS, sem
+   IntersectionObserver ou com movimento reduzido, nada disto liga e a
+   grade aparece inteira e parada. */
+.produto[data-voa] {
+  --p: 0;
+  transform:
+    translate3d(
+      calc(var(--dx, 0px) * (1 - var(--p))),
+      calc(var(--dy, 0px) * (1 - var(--p))),
+      calc(var(--dz, 0px) * (1 - var(--p)))
+    )
+    rotateX(calc(var(--rx, 0deg) * (1 - var(--p))))
+    rotateZ(calc(var(--rz, 0deg) * (1 - var(--p))));
+  opacity: calc(.1 + .9 * var(--p));
+  will-change: transform, opacity;
+}
 
 .produto {
   display: flex; flex-direction: column;

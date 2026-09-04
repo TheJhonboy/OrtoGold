@@ -179,6 +179,10 @@
     ).join('');
     ligarIcones(abas);
 
+    // A grade é reescrita a cada troca de categoria, então os cartões
+    // novos precisam ser reapresentados à animação de entrada.
+    const voo = window.CartoesScroll ? new window.CartoesScroll(grade) : null;
+
     function mostrar(cat) {
       const itens = PRODUTOS.filter((p) => p.cat === cat);
       grade.innerHTML = itens.length
@@ -186,6 +190,7 @@
         : '<p class="secao__texto">Em breve. Fale com o Gilson que ele te conta o que temos disponível.</p>';
       ligarIcones(grade);
       grade.setAttribute('aria-labelledby', 'aba-' + cat);
+      if (voo && itens.length) voo.montar();
     }
 
     abas.addEventListener('click', (ev) => {
