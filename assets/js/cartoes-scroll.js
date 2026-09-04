@@ -32,7 +32,18 @@
 
   /* Rolagem gasta por cartão. Menos que isto e o trilho vira um
      borrão; mais e a pessoa fica presa rolando sem ver mudança. */
-  const TELAS_POR_CARTAO = 0.62;
+  const TELAS_POR_CARTAO = 0.75;
+
+  /* O quanto da distância que falta o trilho vence a cada quadro de
+     60 Hz. Isto é o que tira o travado: em vez de colar na rolagem, o
+     trilho persegue ela com atraso. A roda do mouse anda em degraus de
+     uns 100px, e quem gruda nesses degraus salta; quem persegue desliza.
+     Perto de 1 volta a grudar, perto de 0 fica mole demais. */
+  const PERSEGUICAO = 0.085;
+
+  /* Abaixo desta diferença o olho não vê mais e a perseguição para, para
+     não deixar um requestAnimationFrame girando à toa. */
+  const PARADA = 0.0002;
 
   /* Abaixo desta altura o palco fixo engole a tela inteira e a
      pessoa perde a noção de onde está na página. */
@@ -53,7 +64,8 @@
     this.palco = palco;
     this.grade = grade;
     this.cartoes = [];
-    this.agendado = false;
+    this.rodando = false;
+    this.progresso = 0;
   }
 
   Vitrine.prototype.montar = function () {
@@ -86,7 +98,8 @@
     };
     global.addEventListener('resize', this.aoRedimensionar, { passive: true });
 
-    this.agendar();
+    // Sem perseguição no primeiro quadro: o trilho já nasce no lugar.
+    this.atualizar();
   };
 
   Vitrine.prototype.desmontar = function () {
@@ -136,23 +149,68 @@
     this.palco.style.setProperty('--desvio', desvio + 'px');
   };
 
-  Vitrine.prototype.agendar = function () {
-    if (this.agendado) return;
-    this.agendado = true;
-    global.requestAnimationFrame(() => {
-      this.agendado = false;
-      this.atualizar();
-    });
-  };
-
-  Vitrine.prototype.atualizar = function () {
-    if (!this.cartoes.length) return;
-
+  /* Onde a rolagem está agora. Devolve null quando não há percurso. */
+  Vitrine.prototype.alvo = function () {
     const caixa = this.secao.getBoundingClientRect();
     const curso = caixa.height - global.innerHeight;
-    if (curso <= 0) return;
+    if (curso <= 0) return null;
+    return limitar(-caixa.top / curso, 0, 1);
+  };
 
-    const p = limitar(-caixa.top / curso, 0, 1);
+  /* Mantém um laço rodando enquanto o trilho ainda não alcançou a
+     rolagem. Um quadro só não basta: a graça está justamente nos
+     quadros que vêm depois que a pessoa parou de rolar. */
+  Vitrine.prototype.agendar = function () {
+    if (this.rodando) return;
+    this.rodando = true;
+    this.quadroAnterior = 0;
+
+    const passo = (agora) => {
+      /* Teto de 64ms: se a aba ficou escondida ou o navegador engasgou,
+         um salto enorme faria o trilho teleportar. */
+      const dt = this.quadroAnterior ? Math.min(64, agora - this.quadroAnterior) : 16.7;
+      this.quadroAnterior = agora;
+
+      if (this.perseguir(dt)) {
+        global.requestAnimationFrame(passo);
+      } else {
+        this.rodando = false;
+        this.quadroAnterior = 0;
+      }
+    };
+
+    global.requestAnimationFrame(passo);
+  };
+
+  /* Anda um quadro na direção da rolagem. Devolve se ainda falta chão.
+     A conta do fator deixa a suavização igual em 60, 120 ou 144 Hz —
+     sem ela, monitor rápido persegue rápido e o efeito muda de máquina
+     para máquina. */
+  Vitrine.prototype.perseguir = function (dt) {
+    const alvo = this.alvo();
+    if (alvo === null) return false;
+
+    const fator = 1 - Math.pow(1 - PERSEGUICAO, dt / 16.6667);
+    this.progresso += (alvo - this.progresso) * fator;
+
+    const chegou = Math.abs(alvo - this.progresso) < PARADA;
+    if (chegou) this.progresso = alvo;
+
+    this.pintar(this.progresso);
+    return !chegou;
+  };
+
+  /* Pula a perseguição e vai direto para onde a rolagem está. Usado ao
+     montar, senão o trilho abriria correndo até a posição certa. */
+  Vitrine.prototype.atualizar = function () {
+    const alvo = this.alvo();
+    if (alvo === null) return;
+    this.progresso = alvo;
+    this.pintar(alvo);
+  };
+
+  Vitrine.prototype.pintar = function (p) {
+    if (!this.cartoes.length) return;
 
     this.cartoes.forEach((cartao, i) => {
       const u = 1 + i * ESPACAMENTO - p * this.percurso;
@@ -169,5 +227,5 @@
     });
   };
 
-  global.Vitrine = global.IntersectionObserver ? Vitrine : null;
+  global.Vitrine = Vitrine;
 })(window);
