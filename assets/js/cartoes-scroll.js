@@ -118,9 +118,19 @@
     const curso = this.cartoes.length * TELAS_POR_CARTAO * tela;
     this.secao.style.height = Math.round(tela + curso) + 'px';
 
-    /* Quanto o cartão desce entre uma ponta e outra do trilho... */
-    this.palco.style.setProperty('--alcance', Math.round(tela * 0.62) + 'px');
-    /* ...e quanto ele anda para o lado no mesmo percurso. Sem isso a
+    /* O topo do site é sticky e fica por cima de tudo: o bloco preso
+       precisa começar embaixo dele, senão o título some atrás. */
+    const topo = document.getElementById('topo');
+    const alturaTopo = topo ? Math.round(topo.getBoundingClientRect().height) : 0;
+    this.secao.style.setProperty('--altura-topo', alturaTopo + 'px');
+
+    /* O trilho mora só na sobra abaixo das abas, então o alcance sai da
+       altura do palco — não da tela inteira, senão o cartão atravessaria
+       o recorte antes de chegar ao meio. */
+    const alturaPalco = this.palco.clientHeight || tela;
+    this.palco.style.setProperty('--alcance', Math.round(alturaPalco * 0.62) + 'px');
+
+    /* Quanto o cartão anda para o lado no mesmo percurso. Sem isso a
        descida vira elevador; a diagonal é o que dá o movimento. */
     const desvio = Math.min(300, Math.round(this.palco.clientWidth * 0.24));
     this.palco.style.setProperty('--desvio', desvio + 'px');

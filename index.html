@@ -191,7 +191,12 @@
 
 <!-- ============================ CATÁLOGO ============================= -->
 <section class="secao" id="catalogo">
-  <div class="limite">
+  <!-- A vitrine envolve o cabeçalho junto com o palco: assim o título, o
+       texto e as abas ficam presos na tela enquanto os produtos passam,
+       em vez de rolarem para fora no meio da animação. -->
+  <div class="vitrine" id="vitrine">
+   <div class="vitrine__fixo">
+    <div class="limite">
     <header class="secao__cabeca">
       <p class="sobrancelha"><span class="sobrancelha__risco"></span>Catálogo</p>
       <h2 class="titulo">O que a gente fabrica</h2>
@@ -222,15 +227,14 @@
           <span class="abas-trilho__bolinha" id="abas-bolinha"></span>
         </div>
       </div>
-      <!-- A vitrine só vira palco fixo quando o JS confirma que dá:
-           tela alta o bastante, movimento não reduzido, dois produtos ou
-           mais. Fora disso continua sendo a grade de sempre. -->
-      <div class="vitrine" id="vitrine">
-        <div class="vitrine__palco">
-          <div class="produtos" id="produtos"></div>
-        </div>
+      <!-- O palco só vira trilho quando o JS confirma que dá: tela alta o
+           bastante, movimento não reduzido, dois produtos ou mais. Fora
+           disso continua sendo a grade de sempre. -->
+      <div class="vitrine__palco">
+        <div class="produtos" id="produtos"></div>
       </div>
     </div>
+   </div>
   </div>
 </section>
 
