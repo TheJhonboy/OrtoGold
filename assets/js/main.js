@@ -180,8 +180,13 @@
     ligarIcones(abas);
 
     // A grade é reescrita a cada troca de categoria, então os cartões
-    // novos precisam ser reapresentados à animação de entrada.
-    const voo = window.CartoesScroll ? new window.CartoesScroll(grade) : null;
+    // novos precisam ser remontados no trilho da vitrine.
+    const secaoVitrine = $('#vitrine');
+    const palco = secaoVitrine && $('.vitrine__palco', secaoVitrine);
+    const vitrine =
+      window.Vitrine && secaoVitrine && palco
+        ? new window.Vitrine(secaoVitrine, palco, grade)
+        : null;
 
     function mostrar(cat) {
       const itens = PRODUTOS.filter((p) => p.cat === cat);
@@ -190,7 +195,7 @@
         : '<p class="secao__texto">Em breve. Fale com o Gilson que ele te conta o que temos disponível.</p>';
       ligarIcones(grade);
       grade.setAttribute('aria-labelledby', 'aba-' + cat);
-      if (voo && itens.length) voo.montar();
+      if (vitrine) vitrine.montar();
     }
 
     abas.addEventListener('click', (ev) => {

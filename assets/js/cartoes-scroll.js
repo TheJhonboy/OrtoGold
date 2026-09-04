@@ -1,138 +1,126 @@
 /* ============================================================
-   CARTÕES QUE ENTRAM COM O SCROLL
+   VITRINE — OS PRODUTOS PASSAM COM O SCROLL
    ------------------------------------------------------------
-   Os cartões de produto chegam tortos, vindos de fora e de longe,
-   e vão endireitando conforme a pessoa rola até assentarem no
-   lugar deles na grade.
+   A seção trava na tela e os cartões sobem por um trilho: entram
+   por baixo tortos, endireitam ao cruzar o meio e saem por cima
+   tortos de novo, afastando da câmera nas duas pontas. Dois ficam
+   legíveis por vez — um embaixo, outro em cima — e a cada trecho
+   de rolagem sobe o próximo.
 
-   Quem move é o CSS: aqui só se escreve a variável --p (0 a 1) de
-   cada cartão. Isso mantém a conta de transform num lugar só e
-   deixa o navegador compor sem passar pelo layout.
+   Cada cartão tem uma posição no trilho, o `u`:
 
-   Regra de robustez: o estado natural do cartão é ASSENTADO. A
-   animação é enfeite que se liga por cima. Sem JavaScript, com
-   erro, ou com movimento reduzido, a grade aparece inteira e
-   parada — nunca some produto da tela.
+       u = +1   acabou de entrar, embaixo, deitado para trás
+       u =  0   no meio da tela, reto, colado na câmera
+       u = -1   saindo por cima, deitado para frente
+
+   Quem move é o CSS. Aqui só se escreve `u` e a opacidade de cada
+   cartão, uma vez por quadro.
+
+   Regra de robustez: o estado natural continua sendo a grade
+   parada. O trilho só liga depois que a altura foi calculada. Sem
+   JavaScript, com movimento reduzido ou em tela baixa demais, a
+   pessoa vê a grade inteira de sempre.
    ============================================================ */
 
 (function (global) {
   'use strict';
 
-  const doc = global.document;
+  /* Quanto de `u` separa um cartão do seguinte. Menor que 1 mantém
+     sempre dois na tela ao mesmo tempo, que é o efeito pedido. */
+  const ESPACAMENTO = 0.85;
 
-  /* Consultado na hora de montar, e não uma vez no carregamento: quem
-     liga "reduzir movimento" no meio da visita tem a animação desligada
-     na próxima troca de categoria, sem precisar recarregar. */
+  /* Rolagem gasta por cartão. Menos que isto e o trilho vira um
+     borrão; mais e a pessoa fica presa rolando sem ver mudança. */
+  const TELAS_POR_CARTAO = 0.62;
+
+  /* Abaixo desta altura o palco fixo engole a tela inteira e a
+     pessoa perde a noção de onde está na página. */
+  const ALTURA_MINIMA = 520;
+
   function pediuMenosMovimento() {
     return !!(
       global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches
     );
   }
 
-  /* Deslocamento inicial de cada cartão. O lado alterna e a
-     distância varia em três degraus, senão a fileira inteira entra
-     igual e o efeito vira cortina em vez de bagunça organizada. */
-  function partidaDoCartao(indice) {
-    const lado = indice % 2 === 0 ? -1 : 1;
-    const degrau = indice % 3;
-    return {
-      x: lado * (150 + degrau * 70),
-      y: 70 + degrau * 18,
-      z: -(220 + degrau * 90),
-      rx: 26 + degrau * 6,
-      rz: lado * (3 + degrau),
-    };
+  function limitar(v, minimo, maximo) {
+    return Math.min(maximo, Math.max(minimo, v));
   }
 
-  /* Desacelera no fim: o cartão chega rápido e assenta devagar. */
-  function suavizar(p) {
-    return 1 - Math.pow(1 - p, 3);
-  }
-
-  function CartoesScroll(grade) {
+  function Vitrine(secao, palco, grade) {
+    this.secao = secao;
+    this.palco = palco;
     this.grade = grade;
-    this.ativos = new Set();
+    this.cartoes = [];
     this.agendado = false;
-    this.observador = null;
   }
 
-  CartoesScroll.prototype.montar = function () {
+  Vitrine.prototype.montar = function () {
     this.desmontar();
 
-    if (!this.grade || pediuMenosMovimento()) {
-      this.limpar();
-      return;
-    }
+    if (!this.secao || !this.palco || !this.grade) return;
+    if (pediuMenosMovimento() || global.innerHeight < ALTURA_MINIMA) return;
 
-    const cartoes = Array.from(this.grade.children);
-    if (!cartoes.length) return;
+    this.cartoes = Array.from(this.grade.children);
+    if (this.cartoes.length < 2) return;
 
-    cartoes.forEach((cartao, i) => {
-      const de = partidaDoCartao(i);
-      cartao.style.setProperty('--dx', de.x + 'px');
-      cartao.style.setProperty('--dy', de.y + 'px');
-      cartao.style.setProperty('--dz', de.z + 'px');
-      cartao.style.setProperty('--rx', de.rx + 'deg');
-      cartao.style.setProperty('--rz', de.rz + 'deg');
-      cartao.style.setProperty('--p', '0');
-      cartao.dataset.voa = '';
+    /* O percurso total em unidades de `u`: o primeiro cartão nasce em
+       +1 e o último morre em -1, com os outros escalonados no meio. */
+    this.percurso = (this.cartoes.length - 1) * ESPACAMENTO + 2;
+
+    this.cartoes.forEach((cartao) => {
+      cartao.dataset.palco = '';
     });
 
-    /* Só os cartões perto da tela entram na conta por quadro. Com 25
-       produtos, atualizar todos a cada scroll é trabalho jogado fora. */
-    this.observador = new global.IntersectionObserver(
-      (entradas) => {
-        entradas.forEach((entrada) => {
-          if (entrada.isIntersecting) {
-            this.ativos.add(entrada.target);
-          } else {
-            this.ativos.delete(entrada.target);
-            /* Quem já passou por cima fica assentado; quem ainda não
-               chegou volta ao ponto de partida. */
-            const acabouDePassar = entrada.boundingClientRect.top < 0;
-            entrada.target.style.setProperty('--p', acabouDePassar ? '1' : '0');
-          }
-        });
-        this.agendar();
-      },
-      { rootMargin: '20% 0px 20% 0px' }
-    );
-
-    cartoes.forEach((cartao) => this.observador.observe(cartao));
+    this.secao.dataset.palco = 'ativo';
+    this.medir();
 
     this.aoRolar = () => this.agendar();
     global.addEventListener('scroll', this.aoRolar, { passive: true });
-    global.addEventListener('resize', this.aoRolar, { passive: true });
+
+    this.aoRedimensionar = () => {
+      /* Girar o telefone pode cruzar o limite de altura mínima nos dois
+         sentidos, então remonta em vez de só remedir. */
+      this.montar();
+    };
+    global.addEventListener('resize', this.aoRedimensionar, { passive: true });
 
     this.agendar();
   };
 
-  CartoesScroll.prototype.desmontar = function () {
-    if (this.observador) {
-      this.observador.disconnect();
-      this.observador = null;
-    }
+  Vitrine.prototype.desmontar = function () {
     if (this.aoRolar) {
       global.removeEventListener('scroll', this.aoRolar);
-      global.removeEventListener('resize', this.aoRolar);
       this.aoRolar = null;
     }
-    this.ativos.clear();
+    if (this.aoRedimensionar) {
+      global.removeEventListener('resize', this.aoRedimensionar);
+      this.aoRedimensionar = null;
+    }
+    if (this.secao) {
+      delete this.secao.dataset.palco;
+      this.secao.style.removeProperty('height');
+    }
+    if (this.grade) {
+      Array.from(this.grade.children).forEach((cartao) => {
+        delete cartao.dataset.palco;
+        ['--u', '--o', 'z-index'].forEach((nome) => cartao.style.removeProperty(nome));
+      });
+    }
+    this.cartoes = [];
   };
 
-  /* Devolve os cartões ao estado assentado, apagando o que a animação
-     tinha escrito neles. */
-  CartoesScroll.prototype.limpar = function () {
-    if (!this.grade) return;
-    Array.from(this.grade.children).forEach((cartao) => {
-      delete cartao.dataset.voa;
-      ['--dx', '--dy', '--dz', '--rx', '--rz', '--p'].forEach((nome) =>
-        cartao.style.removeProperty(nome)
-      );
-    });
+  /* A altura da seção é o que dá o curso de rolagem: uma tela para o
+     palco ficar parado mais um tanto por cartão. */
+  Vitrine.prototype.medir = function () {
+    const tela = global.innerHeight;
+    const curso = this.cartoes.length * TELAS_POR_CARTAO * tela;
+    this.secao.style.height = Math.round(tela + curso) + 'px';
+    /* O quanto o cartão sobe entre uma ponta e outra do trilho. */
+    this.palco.style.setProperty('--alcance', Math.round(tela * 0.62) + 'px');
   };
 
-  CartoesScroll.prototype.agendar = function () {
+  Vitrine.prototype.agendar = function () {
     if (this.agendado) return;
     this.agendado = true;
     global.requestAnimationFrame(() => {
@@ -141,26 +129,29 @@
     });
   };
 
-  CartoesScroll.prototype.atualizar = function () {
-    const altura = global.innerHeight;
-    /* O voo acontece com o cartão já dentro da tela: começa com o topo
-       dele a 95% da altura e termina assentado a 35%. Se começasse na
-       borda de baixo, quase toda a animação rodaria fora da vista e a
-       pessoa só veria o cartão já parado. */
-    const inicio = altura * 0.95;
-    const percurso = altura * 0.6;
+  Vitrine.prototype.atualizar = function () {
+    if (!this.cartoes.length) return;
 
-    this.ativos.forEach((cartao) => {
-      const topo = cartao.getBoundingClientRect().top;
-      let p = (inicio - topo) / percurso;
-      p = Math.min(1, Math.max(0, p));
-      cartao.style.setProperty('--p', suavizar(p).toFixed(4));
+    const caixa = this.secao.getBoundingClientRect();
+    const curso = caixa.height - global.innerHeight;
+    if (curso <= 0) return;
+
+    const p = limitar(-caixa.top / curso, 0, 1);
+
+    this.cartoes.forEach((cartao, i) => {
+      const u = 1 + i * ESPACAMENTO - p * this.percurso;
+      const preso = limitar(u, -1.35, 1.35);
+
+      /* Some antes de chegar à borda: cartão sumindo no meio do nada é
+         mais limpo do que cartão cortado pela beirada da tela. */
+      const opacidade = limitar(1 - (Math.abs(preso) - 0.72) / 0.5, 0, 1);
+
+      cartao.style.setProperty('--u', preso.toFixed(4));
+      cartao.style.setProperty('--o', opacidade.toFixed(3));
+      /* Quem está mais perto do meio passa na frente. */
+      cartao.style.zIndex = String(Math.round(100 - Math.abs(preso) * 50));
     });
   };
 
-  global.CartoesScroll = CartoesScroll;
-
-  /* Se o navegador não tem IntersectionObserver, nada acontece e a
-     grade fica parada — que já é o estado correto. */
-  if (!global.IntersectionObserver || !doc) global.CartoesScroll = null;
+  global.Vitrine = global.IntersectionObserver ? Vitrine : null;
 })(window);

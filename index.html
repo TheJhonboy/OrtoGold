@@ -222,7 +222,14 @@
           <span class="abas-trilho__bolinha" id="abas-bolinha"></span>
         </div>
       </div>
-      <div class="produtos" id="produtos"></div>
+      <!-- A vitrine só vira palco fixo quando o JS confirma que dá:
+           tela alta o bastante, movimento não reduzido, dois produtos ou
+           mais. Fora disso continua sendo a grade de sempre. -->
+      <div class="vitrine" id="vitrine">
+        <div class="vitrine__palco">
+          <div class="produtos" id="produtos"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

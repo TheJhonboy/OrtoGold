@@ -382,33 +382,52 @@ button { font: inherit; cursor: pointer; }
 }
 .abas-trilho.esta-arrastando .abas-trilho__bolinha { background: var(--azul-claro); }
 
-/* A perspectiva mora na grade, não no cartão: assim todos os cartões
-   dividem o mesmo ponto de fuga e a fileira parece uma cena só, em vez
-   de cada um ter a própria câmera. */
-.produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; perspective: 1600px; }
+.produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
-/* Os cartões saem para fora da grade enquanto entram. O clip corta essa
-   sobra sem criar barra de rolagem nem virar container de scroll — o
-   overflow: auto quebraria o sticky da faixa de categorias. */
-#catalogo { overflow-x: clip; }
-
-/* O estado natural do cartão é assentado. O JS só acrescenta o data-voa
-   e vai escrevendo --p de 0 (longe e torto) a 1 (no lugar). Sem JS, sem
-   IntersectionObserver ou com movimento reduzido, nada disto liga e a
-   grade aparece inteira e parada. */
-.produto[data-voa] {
-  --p: 0;
-  transform:
-    translate3d(
-      calc(var(--dx, 0px) * (1 - var(--p))),
-      calc(var(--dy, 0px) * (1 - var(--p))),
-      calc(var(--dz, 0px) * (1 - var(--p)))
-    )
-    rotateX(calc(var(--rx, 0deg) * (1 - var(--p))))
-    rotateZ(calc(var(--rz, 0deg) * (1 - var(--p))));
-  opacity: calc(.1 + .9 * var(--p));
-  will-change: transform, opacity;
+/* ---- VITRINE: o palco onde os produtos passam com o scroll ----
+   Sem o data-palco isto tudo é inerte e a grade fica como sempre foi.
+   O JS só liga depois de confirmar altura de tela, movimento não
+   reduzido e pelo menos dois produtos. */
+.vitrine[data-palco="ativo"] .vitrine__palco {
+  position: sticky; top: 0; height: 100vh;
+  display: grid; place-items: center;
+  perspective: 1500px;
+  /* A câmera fica um pouco acima do meio: o cartão que sobe passa
+     reto na altura do olhar, e não na barriga da tela. */
+  perspective-origin: 50% 42%;
 }
+
+.vitrine[data-palco="ativo"] .produtos {
+  display: block; position: relative;
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* O trilho. `u` vai de +1 (entrando por baixo, deitado para trás) a
+   -1 (saindo por cima, deitado para frente), passando reto e colado na
+   câmera no zero. O z usa u² para afastar nas duas pontas por igual.
+
+   O seletor é longo de propósito: precisa vencer o `.produto:hover`,
+   que senão empurraria o cartão para fora da posição calculada. */
+.vitrine[data-palco="ativo"] .produto[data-palco] {
+  position: absolute; top: 50%; left: 50%;
+  width: min(430px, 88vw);
+  transform:
+    translate(-50%, -50%)
+    translate3d(
+      calc(var(--u, 0) * 70px),
+      calc(var(--u, 0) * var(--alcance, 380px)),
+      calc(var(--u, 0) * var(--u, 0) * -260px)
+    )
+    rotateX(calc(var(--u, 0) * -44deg));
+  opacity: var(--o, 1);
+  will-change: transform, opacity;
+  box-shadow: var(--sombra-forte);
+}
+
+/* No palco a foto encolhe para o cartão inteiro — foto, texto, tamanhos
+   e botão — caber numa tela só, sem rolar por dentro. */
+.vitrine[data-palco="ativo"] .produto__midia { aspect-ratio: 16 / 10; }
 
 .produto {
   display: flex; flex-direction: column;
