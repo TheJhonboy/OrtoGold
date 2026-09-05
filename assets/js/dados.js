@@ -52,13 +52,24 @@ const LOJA = {
 };
 
 /* ============================================================
-   NÚMEROS DA FAIXA DE DESTAQUE (logo abaixo do topo)
+   FAIXA DE DESTAQUE (logo abaixo do topo)
+   ------------------------------------------------------------
+   Cada um vira um cartão com foto. A foto fica em assets/img/.
+   Sem 'foto', o cartão continua funcionando: mostra só o ícone
+   sobre o fundo escuro da marca, sem buraco na tela.
    ============================================================ */
 const DESTAQUES = [
-  { icone: 'fabrica',   titulo: 'Fábrica própria',    texto: 'Direto de quem produz' },
-  { icone: 'entrega',   titulo: 'Entrega em Goiânia', texto: 'Combine com o consultor' },
-  { icone: 'medida',    titulo: 'Sob medida',         texto: 'Seu colchão do seu jeito' },
-  { icone: 'atendente', titulo: 'Atendimento direto', texto: 'Fale com o Gilson' },
+  { icone: 'fabrica',   titulo: 'Fábrica própria',    texto: 'Direto de quem produz',
+    foto: 'destaque-fabrica.webp', alt: 'Estrutura de uma base sendo montada na fábrica' },
+
+  { icone: 'entrega',   titulo: 'Entrega em Goiânia', texto: 'Combine com o consultor',
+    foto: 'destaque-entrega.webp', alt: 'Cama box montada e arrumada no quarto do cliente' },
+
+  { icone: 'medida',    titulo: 'Sob medida',         texto: 'Seu colchão do seu jeito',
+    foto: 'destaque-medida.webp',  alt: 'Cabeceira estofada feita na medida da cama' },
+
+  { icone: 'atendente', titulo: 'Atendimento direto', texto: 'Fale com o Gilson',
+    foto: 'gilson-v2.webp',        alt: 'Gilson, consultor de vendas da OrtoGold' },
 ];
 
 /* ============================================================
@@ -172,15 +183,15 @@ const PRODUTOS = [
 
   { id: 'c4', cat: 'colchoes', nome: 'Colchão Ortopédico D45',
     descricao: 'Densidade 45, extra firme. Indicado para quem tem dor na coluna ou pesa mais.',
-    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: null },
+    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: 'colchao-d45.webp' },
 
   { id: 'c5', cat: 'colchoes', nome: 'Colchão Espuma D20',
     descricao: 'Linha de entrada, espuma D20 certificada. Boa para quarto de hóspede e casa de praia.',
-    tags: ['Solteiro 78×188', 'Solteiro 88×188', 'Casal 138×188'], foto: null },
+    tags: ['Solteiro 78×188', 'Solteiro 88×188', 'Casal 138×188'], foto: 'colchao-d20.webp' },
 
   { id: 'c6', cat: 'colchoes', nome: 'Colchão Sob Medida',
     descricao: 'Beliche, treliche, barco, motorhome, cama antiga que ninguém mais fabrica. Manda a medida no WhatsApp.',
-    tags: ['Medida livre', 'Feito na fábrica'], foto: null },
+    tags: ['Medida livre', 'Feito na fábrica'], foto: 'colchao-sob-medida.webp' },
 
   /* ------------------------ BASES ------------------------
      Vocabulário de loja: box conjugada é base mais colchão no
@@ -188,15 +199,15 @@ const PRODUTOS = [
      partes para passar em porta estreita e elevador. */
   { id: 'b1', cat: 'bases', nome: 'Cama Box Conjugada',
     descricao: 'Base e colchão no mesmo conjunto, altura boa para sentar e levantar. Pés de madeira ou de plástico.',
-    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: null },
+    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: 'base-conjugada.webp' },
 
   { id: 'b2', cat: 'bases', nome: 'Cama Box Baú',
     descricao: 'Levanta por cima com pistão a gás e vira armário. Guarda edredom, mala e o que não cabe no guarda-roupa.',
-    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198'], foto: 'prod-06.webp' },
+    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198'], foto: 'base-bau.webp' },
 
   { id: 'b3', cat: 'bases', nome: 'Cama Box Baú Bipartido',
     descricao: 'O baú vem em duas partes: passa em porta estreita, corredor e elevador. De casal para cima.',
-    tags: ['Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: null },
+    tags: ['Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: 'base-bau-bipartido.webp' },
 
   { id: 'b4', cat: 'bases', nome: 'Cama Box Bicama',
     descricao: 'Uma cama auxiliar guardada embaixo da outra, com rodízio. Resolve quarto pequeno e visita que dorme.',
@@ -204,50 +215,50 @@ const PRODUTOS = [
 
   { id: 'b5', cat: 'bases', nome: 'Box Base Simples',
     descricao: 'Só a base, sem baú e sem colchão. Para quem já tem colchão bom e quer trocar só a cama.',
-    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: null },
+    tags: ['Solteiro 88×188', 'Casal 138×188', 'Queen 158×198', 'King 193×203'], foto: 'base-simples.webp' },
 
   /* --------------------- CABECEIRAS ----------------------
      Cabeceira se mede pela largura da cama: casal 1,40 m,
      queen 1,60 m e king 1,95 m. */
   { id: 'h1', cat: 'cabeceiras', nome: 'Cabeceira Estofada Lisa',
     descricao: 'Painel inteiro estofado, acabamento limpo. Suede, linho ou corino, você escolhe a cor.',
-    tags: ['Casal 1,40 m', 'Queen 1,60 m', 'King 1,95 m'], foto: 'prod-08.webp' },
+    tags: ['Casal 1,40 m', 'Queen 1,60 m', 'King 1,95 m'], foto: 'cabeceira-lisa.webp' },
 
   { id: 'h2', cat: 'cabeceiras', nome: 'Cabeceira Capitonê',
     descricao: 'Botões em losango, o modelo mais pedido da fábrica. Dá cara de quarto de revista.',
-    tags: ['Casal 1,40 m', 'Queen 1,60 m', 'King 1,95 m'], foto: 'prod-07.webp' },
+    tags: ['Casal 1,40 m', 'Queen 1,60 m', 'King 1,95 m'], foto: 'cabeceira-capitone.webp' },
 
   { id: 'h3', cat: 'cabeceiras', nome: 'Cabeceira Ripada',
     descricao: 'Gomos verticais estofados, visual moderno e mais alto. Fica bem em parede de cor escura.',
-    tags: ['Queen 1,60 m', 'King 1,95 m', 'Sob medida'], foto: null },
+    tags: ['Queen 1,60 m', 'King 1,95 m', 'Sob medida'], foto: 'cabeceira-ripada.webp' },
 
   /* -------------------- TRAVESSEIROS ---------------------
      Medida de travesseiro no Brasil: 50×70 é o padrão e 50×90
      é o king, que pede fronha maior. */
   { id: 't1', cat: 'travesseiros', nome: 'Travesseiro Viscoelástico',
     descricao: 'Espuma viscoelástica: molda no formato do pescoço e volta ao normal. Para quem acorda com dor.',
-    tags: ['50×70 padrão', '50×90 king'], foto: null },
+    tags: ['50×70 padrão', '50×90 king'], foto: 'travesseiro-visco.webp' },
 
   { id: 't2', cat: 'travesseiros', nome: 'Travesseiro de Látex',
     descricao: 'Firme e arejado, não achata com o tempo. Dura mais que os outros.',
-    tags: ['50×70 padrão'], foto: null },
+    tags: ['50×70 padrão'], foto: 'travesseiro-latex.webp' },
 
   { id: 't3', cat: 'travesseiros', nome: 'Travesseiro de Fibra Siliconada',
     descricao: 'Macio e leve, o mais fácil de lavar. Bom para quem dorme de bruços.',
-    tags: ['50×70 padrão', '50×90 king'], foto: null },
+    tags: ['50×70 padrão', '50×90 king'], foto: 'travesseiro-fibra.webp' },
 
   /* ----------------------- ENXOVAL ----------------------- */
   { id: 'e1', cat: 'enxoval', nome: 'Jogo de Cama',
     descricao: 'Lençol com elástico, lençol de cima e fronhas. Vários padrões e contagens de fio.',
-    tags: ['Solteiro', 'Casal', 'Queen', 'King'], foto: null },
+    tags: ['Solteiro', 'Casal', 'Queen', 'King'], foto: 'enxoval-jogo-cama.webp' },
 
   { id: 'e2', cat: 'enxoval', nome: 'Edredom',
     descricao: 'Enchimento em fibra siliconada, quente sem pesar em cima do corpo.',
-    tags: ['Solteiro', 'Casal', 'Queen', 'King'], foto: null },
+    tags: ['Solteiro', 'Casal', 'Queen', 'King'], foto: 'enxoval-edredom.webp' },
 
   { id: 'e3', cat: 'enxoval', nome: 'Protetor de Colchão Impermeável',
     descricao: 'Com elástico nos cantos. Segura líquido, protege o colchão e sai na máquina de lavar.',
-    tags: ['Solteiro', 'Casal', 'Queen', 'King'], foto: null },
+    tags: ['Solteiro', 'Casal', 'Queen', 'King'], foto: 'enxoval-protetor.webp' },
 
   /* ------------------------ MÓVEIS ----------------------- */
   { id: 'm1', cat: 'moveis', nome: 'Sofá-Cama',
@@ -260,7 +271,7 @@ const PRODUTOS = [
 
   { id: 'm3', cat: 'moveis', nome: 'Poltrona',
     descricao: 'Estofada, para o canto de leitura ou para amamentar no quarto do bebê.',
-    tags: ['1 lugar', 'Com puff'], foto: null },
+    tags: ['1 lugar', 'Com puff'], foto: 'poltrona.webp' },
 
   { id: 'm4', cat: 'moveis', nome: 'Buffet e Aparador',
     descricao: 'Peça de apoio para sala e quarto, em laca com pés de madeira.',

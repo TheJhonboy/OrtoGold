@@ -123,14 +123,101 @@
   function montarDestaques() {
     const alvo = $('#destaques-grade');
     if (!alvo) return;
-    alvo.innerHTML = DESTAQUES.map(
-      (d) =>
-        '<div class="destaque">' +
+
+    alvo.innerHTML = DESTAQUES.map((d, i) => {
+      /* O atraso escalonado é o que faz os quatro entrarem em cascata em
+         vez de piscarem todos juntos. Vai no style porque é um valor por
+         cartão — não dá para escrever isso na folha de estilo. */
+      const foto = d.foto
+        ? '<img src="assets/img/' + d.foto + '" alt="' + (d.alt || '') + '"' +
+          ' loading="lazy" decoding="async" width="640" height="800">'
+        : '';
+
+      return (
+        '<article class="destaque" style="--atraso: ' + i * 90 + 'ms">' +
+        (foto ? '<div class="destaque__midia">' + foto + '</div>' : '') +
         '<span class="destaque__ico" data-icone="' + d.icone + '"></span>' +
-        '<div><strong>' + d.titulo + '</strong><span>' + d.texto + '</span></div>' +
-        '</div>'
-    ).join('');
+        '<div class="destaque__texto">' +
+        '<strong>' + d.titulo + '</strong>' +
+        '<span>' + d.texto + '</span>' +
+        '</div>' +
+        '</article>'
+      );
+    }).join('');
+
     ligarIcones(alvo);
+    revelarDestaques(alvo);
+  }
+
+  /* Os cartões entram quando a faixa chega na tela.
+
+     Regra de robustez: parado é o estado natural. A folha de estilo só
+     esconde o cartão depois que o `data-anima` aparece na grade, e quem
+     escreve esse atributo é este trecho. Sem JavaScript, sem observador
+     ou com movimento reduzido, a faixa nasce inteira na tela. */
+  function revelarDestaques(alvo) {
+    const cartoes = Array.from(alvo.children);
+    if (!cartoes.length) return;
+
+    const semMovimento =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (semMovimento || !('IntersectionObserver' in window)) return;
+
+    alvo.dataset.anima = '';
+
+    const olho = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.dataset.visivel = '';
+          /* Entrou uma vez, entrou. Deixar o observador vivo faria o
+             cartão piscar de novo a cada subida e descida da página. */
+          olho.unobserve(e.target);
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -6% 0px' }
+    );
+
+    cartoes.forEach((c) => olho.observe(c));
+
+    paralaxeDestaques(alvo.closest('.destaques') || alvo, cartoes);
+  }
+
+  /* Paralaxe leve: a foto anda um pouco mais devagar que o cartão. É o
+     que faz a faixa parecer viva enquanto a pessoa rola — inclusive no
+     celular, onde não existe passar o mouse.
+
+     O laço só gira enquanto a faixa está por perto da tela. Fora dela
+     não sobra nada rodando. */
+  function paralaxeDestaques(secao, cartoes) {
+    let rodando = false;
+
+    const pintar = () => {
+      const meio = window.innerHeight / 2;
+
+      cartoes.forEach((c) => {
+        const r = c.getBoundingClientRect();
+        const centro = r.top + r.height / 2;
+        /* -1 quando o cartão está no alto da tela, +1 lá embaixo. */
+        const d = Math.max(-1, Math.min(1, (centro - meio) / (meio + r.height / 2)));
+        c.style.setProperty('--par', (d * 3.5).toFixed(2) + '%');
+      });
+
+      if (rodando) window.requestAnimationFrame(pintar);
+    };
+
+    const olho = new IntersectionObserver(
+      (entradas) => {
+        const dentro = entradas.some((e) => e.isIntersecting);
+        if (dentro === rodando) return;
+        rodando = dentro;
+        if (rodando) window.requestAnimationFrame(pintar);
+      },
+      { rootMargin: '25% 0px' }
+    );
+
+    olho.observe(secao);
   }
 
   /* ---------------------------------------------------------
