@@ -21,7 +21,6 @@
     casa:       'Olá! Vim pelo site da OrtoGold.',
     final:      'Olá, Gilson! Vim pelo site da OrtoGold e quero saber as condições.',
     flutuante:  'Olá, Gilson! Vim pelo site da OrtoGold.',
-    barra:      'Olá, Gilson! Vim pelo site da OrtoGold.',
     rodape:     'Olá! Vim pelo site da OrtoGold.',
   };
 
@@ -92,9 +91,6 @@
             ? 'hoje às ' + formatarHora(faixa.abre)
             : proxima ? proxima.rotulo.toLowerCase() + ' às ' + formatarHora(proxima.abre) : 'em breve'));
     selo.hidden = false;
-
-    const barra = $('#barra-status');
-    if (barra) barra.textContent = aberto ? 'Online agora' : 'Deixe sua mensagem';
 
     const linha = $('#consultor-horario');
     if (linha) {
@@ -671,7 +667,35 @@
   function ligarTopo() {
     const topo = $('.topo');
     if (!topo) return;
-    const conferir = () => topo.classList.toggle('topo--rolado', window.scrollY > 40);
+
+    /* Rolagem de dedo e de trackpad treme para os dois lados o tempo
+       todo. Sem esta margem o cabeçalho piscaria a cada tremida. */
+    const TREMIDA = 6;
+
+    let ultimo = window.scrollY;
+
+    function conferir() {
+      const y = window.scrollY;
+      topo.classList.toggle('topo--rolado', y > 40);
+
+      const passo = y - ultimo;
+      if (Math.abs(passo) < TREMIDA) return;
+      ultimo = y;
+
+      /* Some ao descer, volta ao subir. Não some enquanto o menu do
+         celular está aberto — sumir com ele levaria junto a única
+         navegação da tela — nem perto do topo da página, onde o
+         cabeçalho não atrapalha nada.
+         O menu ainda pode estar fechando: aí ele já está com hidden e
+         o cabeçalho volta a poder sumir no passo seguinte. */
+      const menu = $('#menu-celular');
+      const menuAberto = menu && !menu.hidden;
+      const descendo = passo > 0;
+      const longeDoTopo = y > topo.offsetHeight * 2;
+
+      topo.classList.toggle('topo--escondido', descendo && longeDoTopo && !menuAberto);
+    }
+
     window.addEventListener('scroll', conferir, { passive: true });
     conferir();
   }

@@ -138,9 +138,14 @@ button { font: inherit; cursor: pointer; }
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255,255,255,.08);
-  transition: background .25s ease;
+  transition: background .25s ease, transform .3s ease;
 }
 .topo--rolado { background: rgba(10,14,31,.96); }
+
+/* Some ao descer, volta ao subir. Quem está descendo quer ver o site;
+   quem sobe está procurando o menu. Continua sticky: só sai de vista,
+   e volta no primeiro movimento para cima. */
+.topo--escondido { transform: translateY(-100%); }
 
 .topo__interno {
   max-width: var(--limite); margin-inline: auto; padding: 12px 20px;
@@ -773,17 +778,6 @@ button { font: inherit; cursor: pointer; }
 .flutuante__zap svg { width: 100%; height: 100%; }
 
 /* --------------------- BARRA FIXA CELULAR ------------------ */
-.barra-celular {
-  display: none;
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 75;
-  align-items: center; justify-content: space-between; gap: 14px;
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
-  background: rgba(10,14,31,.97);
-  border-top: 1px solid rgba(255,255,255,.1);
-}
-.barra-celular__texto strong { display: block; color: #fff; font-family: var(--display); font-size: .96rem; }
-.barra-celular__texto small { color: rgba(255,255,255,.6); font-size: .78rem; }
-
 /* ========================= RESPONSIVO ====================== */
 /* Entre 861px e 1100px o menu e o botão dividem pouco espaço.
    Aperta os dois em vez de deixar quebrar linha. */
@@ -819,8 +813,6 @@ button { font: inherit; cursor: pointer; }
   .menu__abrir { display: flex; }
   .flutuante__balao { display: none; }
   .flutuante { display: none; }
-  .barra-celular { display: flex; }
-  body { padding-bottom: 76px; }
   .carimbo { display: none; }
   .hero__conteudo { padding: 70px 20px 130px; }
   .hero[data-filme="ativo"] { height: 460vh; }
@@ -887,12 +879,6 @@ button { font: inherit; cursor: pointer; }
      Aqui o cabeçalho aperta, o cartão encurta e quem está fora do
      centro encolhe mais, para o produto da vez ficar sozinho grande. */
   .vitrine[data-palco="ativo"] .vitrine__palco { --encolhe: .34; }
-
-  /* A barra do WhatsApp é fixa no pé da tela e tapava o rodapé do cartão
-     que estava passando. O palco termina acima dela. */
-  .vitrine[data-palco="ativo"] .vitrine__fixo {
-    height: calc(100vh - var(--altura-topo, 68px) - 76px);
-  }
 
   .vitrine[data-palco="ativo"] .secao__cabeca { margin-bottom: 14px; }
   .vitrine[data-palco="ativo"] .secao__cabeca .titulo { font-size: 1.75rem; }
