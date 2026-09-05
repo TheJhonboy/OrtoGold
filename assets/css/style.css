@@ -97,7 +97,15 @@ button { font: inherit; cursor: pointer; }
   font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
   color: var(--azul); margin: 0 0 14px;
 }
-.sobrancelha--claro { color: var(--ouro); }
+/* Vive sobre foto e vídeo, onde o fundo muda de quadro para quadro. O
+   dourado sozinho já contrasta, mas a sombra é o que garante a leitura
+   quando por trás passa um lençol claro. */
+.sobrancelha--claro {
+  color: var(--ouro-claro);
+  font-weight: 800;
+  text-shadow: 0 1px 6px rgba(8, 10, 20, .85), 0 0 2px rgba(8, 10, 20, .9);
+}
+.sobrancelha--claro .sobrancelha__risco { box-shadow: 0 1px 4px rgba(8, 10, 20, .8); }
 .sobrancelha__risco { width: 32px; height: 2px; background: currentColor; flex: none; border-radius: 2px; }
 
 .secao { padding: clamp(56px, 9vw, 104px) 0; }
@@ -254,7 +262,13 @@ button { font: inherit; cursor: pointer; }
 }
 .hero[data-filme="ativo"][data-saiu="sim"] .hero__conteudo,
 .hero[data-filme="ativo"][data-saiu="sim"] .hero__rolar { visibility: hidden; }
-.hero__texto { color: rgba(255,255,255,.78); font-size: 1.06rem; max-width: 44ch; margin: 0 0 28px; }
+/* Fica por cima de foto e vídeo: peso 600 e sombra para o texto não
+   sumir quando por trás passa um lençol claro. */
+.hero__texto {
+  color: rgba(255,255,255,.92); font-size: 1.06rem; font-weight: 600;
+  max-width: 44ch; margin: 0 0 28px;
+  text-shadow: 0 1px 8px rgba(8, 10, 20, .7);
+}
 .hero__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
 .hero__selos { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -834,7 +848,9 @@ button { font: inherit; cursor: pointer; }
   .hero .titulo-gigante { font-size: clamp(1.7rem, 8.2vw, 2.4rem); letter-spacing: -.02em; margin-bottom: 12px; }
   .hero .sobrancelha { justify-content: center; font-size: .6rem; letter-spacing: .1em; margin-bottom: 10px; }
   .hero .sobrancelha__risco { width: 18px; }
-  .hero__texto { font-size: .84rem; line-height: 1.45; max-width: 34ch; margin: 0 auto 18px; color: rgba(255,255,255,.72); }
+  /* No celular a foto ocupa a tela toda atrás do texto, então ele fica
+     ainda mais opaco do que no computador, não menos. */
+  .hero__texto { font-size: .84rem; line-height: 1.45; max-width: 34ch; margin: 0 auto 18px; color: rgba(255,255,255,.94); }
 
   /* Botões lado a lado e baixos. Continuam com 44 px de altura
      de toque — abaixo disso o dedo erra. */
