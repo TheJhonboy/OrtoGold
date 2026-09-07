@@ -66,6 +66,10 @@
      pessoa perde a noção de onde está na página. */
   const ALTURA_MINIMA = 520;
 
+  /* Onde o trilho para de andar. Passou disto o cartão já saiu de cena
+     faz tempo; continuar somando só afastaria ele à toa. */
+  const LIMITE_U = 1.35;
+
   function pediuMenosMovimento() {
     return !!(
       global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -92,6 +96,15 @@
     this.desmontar();
 
     if (!this.secao || !this.palco || !this.grade) return;
+
+    /* O vigia de tamanho é montado ANTES da checagem de altura, e isto
+       importa: girar o telefone ou esticar a janela cruza o limite nos
+       dois sentidos. Registrado depois, quem abrisse o site numa janela
+       baixa desligava o trilho e ele nunca mais voltava, porque não
+       sobrava ninguém escutando para tentar de novo. */
+    this.aoRedimensionar = () => this.montar();
+    global.addEventListener('resize', this.aoRedimensionar, { passive: true });
+
     if (pediuMenosMovimento() || global.innerHeight < ALTURA_MINIMA) return;
 
     this.cartoes = Array.from(this.grade.children);
@@ -114,13 +127,6 @@
 
     this.aoRolar = () => this.agendar();
     global.addEventListener('scroll', this.aoRolar, { passive: true });
-
-    this.aoRedimensionar = () => {
-      /* Girar o telefone pode cruzar o limite de altura mínima nos dois
-         sentidos, então remonta em vez de só remedir. */
-      this.montar();
-    };
-    global.addEventListener('resize', this.aoRedimensionar, { passive: true });
 
     /* A altura da seção acabou de mudar junto com o número de produtos
        da categoria, então rolar só faz sentido depois de medir. */
@@ -273,7 +279,7 @@
 
     this.cartoes.forEach((cartao, i) => {
       const u = NASCE_EM + i * this.espacamento - p * this.percurso;
-      const preso = limitar(u, -1.35, 1.35);
+      const preso = limitar(u, -LIMITE_U, LIMITE_U);
 
       /* Some antes de chegar à borda: cartão sumindo no meio do nada é
          mais limpo do que cartão cortado pela beirada da tela. */
@@ -284,8 +290,26 @@
          cartão igual dos dois lados do trilho. */
       cartao.style.setProperty('--au', Math.abs(preso).toFixed(4));
       cartao.style.setProperty('--o', opacidade.toFixed(3));
-      /* Quem está mais perto do meio passa na frente. */
-      cartao.style.zIndex = String(Math.round(100 - Math.abs(preso) * 50));
+
+      /* Quem está mais perto do meio passa na frente.
+
+         O empate precisa de desempate. Na troca de um produto para o
+         outro os dois vizinhos passam por posições espelhadas, +u e -u:
+         mesma distância do meio, mesmo z-index arredondado, e um em
+         cima do outro na tela. Sem critério o navegador escolhia um a
+         cada quadro e o cartão piscava.
+
+         Resolve em duas partes: o dobro de casas antes de arredondar,
+         para empatar muito menos; e, quando ainda assim empatar, o
+         cartão que está descendo para fora (u negativo, já passou pela
+         câmera) fica na frente — é o que o olho espera de quem acabou
+         de passar por perto.
+
+         A conta sai de LIMITE_U, e não de 1, só para o resultado nunca
+         ficar negativo: z-index negativo joga o cartão para trás do
+         fundo do próprio palco. */
+      const perto = Math.round((LIMITE_U - Math.abs(preso)) * 1000) * 2;
+      cartao.style.zIndex = String(perto + (preso <= 0 ? 1 : 0));
     });
   };
 

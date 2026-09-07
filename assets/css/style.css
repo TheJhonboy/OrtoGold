@@ -511,15 +511,27 @@ button { font: inherit; cursor: pointer; }
    cartão suba por cima do título no meio do percurso. */
 .vitrine[data-palco="ativo"] .vitrine__palco {
   flex: 1; min-height: 0; position: relative; overflow: hidden;
+}
+
+/* A perspectiva mora aqui, no pai direto dos cartões, e o espaço 3D NÃO
+   é compartilhado entre eles (transform-style continua o `flat` padrão).
+
+   Com preserve-3d os cartões dividiam um espaço 3D só, e o navegador
+   passava a desenhá-los pela geometria em vez da ordem de pintura. Na
+   troca de um produto para o outro os dois vizinhos ficam à mesma
+   distância da câmera (o z é u², igual para +u e -u) e inclinados para
+   lados opostos: os dois planos se cruzam, o navegador não tem como
+   decidir qual fica na frente e a cada quadro escolhia um — era isso
+   que piscava.
+
+   Achatado, cada cartão é projetado sozinho, continua com a mesma
+   perspectiva, e quem fica na frente é decidido pelo z-index. */
+.vitrine[data-palco="ativo"] .produtos {
+  display: block; position: absolute; inset: 0;
   perspective: 1500px;
   /* A câmera fica um pouco acima do meio: o cartão passa reto na altura
      do olhar, e não na barriga da tela. */
   perspective-origin: 50% 42%;
-}
-
-.vitrine[data-palco="ativo"] .produtos {
-  display: block; position: absolute; inset: 0;
-  transform-style: preserve-3d;
 }
 
 /* O trilho, medido no site de referência: o cartão entra pelo canto de
@@ -555,6 +567,15 @@ button { font: inherit; cursor: pointer; }
   opacity: var(--o, 1);
   will-change: transform, opacity;
   box-shadow: var(--sombra-forte);
+  /* Sem transição aqui, e isto não é detalhe.
+
+     `.produto` transiciona transform em .2s por causa do efeito de
+     passar o mouse na grade. No trilho o transform é reescrito a cada
+     quadro, então o navegador recomeçava uma transição de 200ms toda
+     vez — a suavização reiniciava do zero 60 vezes por segundo e o
+     cartão andava aos trancos. Quem suaviza o trilho é a perseguição
+     do JavaScript, não o CSS. */
+  transition: none;
 }
 
 /* No palco a foto encolhe para o cartão inteiro — foto, texto, tamanhos
