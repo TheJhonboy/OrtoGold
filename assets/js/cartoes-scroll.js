@@ -125,7 +125,14 @@
     this.secao.dataset.palco = 'ativo';
     this.medir();
 
-    this.aoRolar = () => this.agendar();
+    /* O cabeçalho sai de cena pelo próprio evento de rolagem, não de
+       dentro do laço de quadros: o laço pode estar parado (aba escondida,
+       navegador economizando) e o cabeçalho ficaria travado no estado
+       errado. */
+    this.aoRolar = () => {
+      this.marcarPresa();
+      this.agendar();
+    };
     global.addEventListener('scroll', this.aoRolar, { passive: true });
 
     /* A altura da seção acabou de mudar junto com o número de produtos
@@ -166,6 +173,12 @@
       delete this.secao.dataset.palco;
       this.secao.style.removeProperty('height');
     }
+
+    /* Sem isto o cabeçalho ficaria escondido para sempre se o trilho
+       fosse desligado com a seção presa — trocar de categoria numa tela
+       baixa, por exemplo. */
+    this.presa = false;
+    document.documentElement.removeAttribute('data-vitrine-presa');
     if (this.grade) {
       Array.from(this.grade.children).forEach((cartao) => {
         delete cartao.dataset.palco;
@@ -182,11 +195,11 @@
     const curso = this.cartoes.length * TELAS_POR_CARTAO * tela;
     this.secao.style.height = Math.round(tela + curso) + 'px';
 
-    /* O topo do site é sticky e fica por cima de tudo: o bloco preso
-       precisa começar embaixo dele, senão o título some atrás. */
+    /* Guardado para saber a partir de que ponto o cabeçalho já pode sair
+       de cena: um pouco antes da seção prender, para ele não sair
+       deslizando por cima do palco já montado. */
     const topo = document.getElementById('topo');
-    const alturaTopo = topo ? Math.round(topo.getBoundingClientRect().height) : 0;
-    this.secao.style.setProperty('--altura-topo', alturaTopo + 'px');
+    this.alturaTopo = topo ? Math.round(topo.getBoundingClientRect().height) : 0;
 
     /* O trilho mora só na sobra abaixo das abas, então o alcance sai da
        altura do palco — não da tela inteira, senão o cartão atravessaria
@@ -194,8 +207,20 @@
     const alturaPalco = this.palco.clientHeight || tela;
     this.palco.style.setProperty('--alcance', Math.round(alturaPalco * 0.62) + 'px');
 
-    /* Quanto o cartão anda para o lado no mesmo percurso. Sem isso a
-       descida vira elevador; a diagonal é o que dá o movimento. */
+    /* O cartão tem altura própria — foto, nome, descrição, tamanhos e
+       botão — e ela não sabe nada do palco. Em tela baixa ele ficava mais
+       alto que o palco e aparecia cortado em cima e embaixo, que é o que
+       inviabilizava ver o produto no celular.
+
+       Aqui ele é reduzido só o quanto for preciso para caber inteiro,
+       com uma folga de RESPIRO para não encostar na borda. Cabendo, o
+       fator é 1 e nada muda. */
+    const RESPIRO = 28;
+    const alturaCartao = this.cartoes[0].offsetHeight;
+    const cabem = alturaPalco - RESPIRO;
+    this.cabe = alturaCartao > cabem && alturaCartao > 0 ? cabem / alturaCartao : 1;
+    this.palco.style.setProperty('--cabe', this.cabe.toFixed(4));
+
     /* Quanto o cartão anda para o lado ao longo do percurso. Sem isso a
        descida vira elevador; a diagonal é o que dá o movimento.
 
@@ -203,11 +228,13 @@
        borda, e o corte é uma linha reta que fatia foto e texto no meio.
        O cartão mais deslocado é o da ponta do trilho (|u| = 1), que
        também é o mais encolhido — então a folga que sobra para ele é
-       metade do palco menos metade da largura já encolhida. */
+       metade do palco menos metade da largura já encolhida. O fator de
+       caber entra aqui também: cartão reduzido ocupa menos e libera mais
+       espaço para o lado. */
     const larguraCartao = this.cartoes[0].offsetWidth;
     const encolhe =
       parseFloat(global.getComputedStyle(this.cartoes[0]).getPropertyValue('--encolhe')) || 0;
-    const meiaLarguraNaPonta = (larguraCartao * (1 - encolhe)) / 2;
+    const meiaLarguraNaPonta = (larguraCartao * (1 - encolhe) * this.cabe) / 2;
     const folga = Math.max(0, this.palco.clientWidth / 2 - meiaLarguraNaPonta);
 
     const desejado = Math.min(300, this.palco.clientWidth * 0.24);
@@ -251,7 +278,33 @@
      A conta do fator deixa a suavização igual em 60, 120 ou 144 Hz —
      sem ela, monitor rápido persegue rápido e o efeito muda de máquina
      para máquina. */
+  /* Liga e desliga o atributo que tira o cabeçalho da frente. A seção
+     conta como presa desde um cabeçalho antes de encostar no topo — aí
+     ele termina de deslizar para fora enquanto o palco ainda está
+     chegando, em vez de passar por cima do palco já montado.
+
+     Não vale com o menu do celular aberto: ali o cabeçalho é a única
+     navegação da tela e sumir com ele levaria o menu junto. */
+  Vitrine.prototype.marcarPresa = function () {
+    const caixa = this.secao.getBoundingClientRect();
+    const menu = document.getElementById('menu-celular');
+    const menuAberto = !!(menu && !menu.hidden);
+
+    const presa =
+      !menuAberto &&
+      caixa.top <= (this.alturaTopo || 0) &&
+      caixa.bottom >= global.innerHeight;
+
+    if (presa === this.presa) return;
+    this.presa = presa;
+
+    if (presa) document.documentElement.setAttribute('data-vitrine-presa', '');
+    else document.documentElement.removeAttribute('data-vitrine-presa');
+  };
+
   Vitrine.prototype.perseguir = function (dt) {
+    this.marcarPresa();
+
     const alvo = this.alvo();
     if (alvo === null) return false;
 
@@ -268,6 +321,8 @@
   /* Pula a perseguição e vai direto para onde a rolagem está. Usado ao
      montar, senão o trilho abriria correndo até a posição certa. */
   Vitrine.prototype.atualizar = function () {
+    this.marcarPresa();
+
     const alvo = this.alvo();
     if (alvo === null) return;
     this.progresso = alvo;

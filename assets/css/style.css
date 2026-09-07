@@ -492,11 +492,33 @@ button { font: inherit; cursor: pointer; }
    texto e abas — e não só o palco. Assim a pessoa nunca perde de vista
    o que está vendo nem em qual categoria está enquanto os produtos
    passam. O topo do site já é sticky, então o palco começa abaixo dele. */
+/* O palco toma a tela inteira: começa em 0 e não desconta o cabeçalho,
+   porque enquanto a seção está presa o cabeçalho sai de cena (ver
+   `html[data-vitrine-presa]` mais abaixo). Sem isso sobrava pouca altura
+   no celular — o navegador já come um pedaço em cima e outro embaixo — e
+   o cartão saía cortado dos dois lados.
+
+   svh é a altura da tela com as barras do navegador ABERTAS, o menor
+   valor possível. Com vh o bloco ficava mais alto do que o visível
+   sempre que as barras estavam à mostra, e o pé do cartão sumia. O vh
+   antes fica de reserva para navegador velho que não conhece svh. */
 .vitrine[data-palco="ativo"] .vitrine__fixo {
-  position: sticky; top: var(--altura-topo, 68px);
-  height: calc(100vh - var(--altura-topo, 68px));
+  position: sticky; top: 0;
+  height: 100vh;
+  height: 100svh;
   display: flex; flex-direction: column;
   background: var(--branco);
+}
+
+/* Enquanto a seção dos produtos está presa na tela, o cabeçalho sai da
+   frente. Quem liga e desliga este atributo é o trilho, e ele respeita o
+   menu do celular aberto — sumir com o cabeçalho ali levaria junto a
+   única navegação da tela. */
+html[data-vitrine-presa] .topo {
+  transform: translateY(-100%);
+  /* Escondido mas ainda no lugar: sem isto continuaria roubando o
+     toque na faixa de cima da tela. */
+  pointer-events: none;
 }
 
 /* min-height: 0 nos dois: item flex não encolhe abaixo do conteúdo sem
@@ -563,7 +585,11 @@ button { font: inherit; cursor: pointer; }
        leitura de profundidade — o produto da vez é o grande — e evita
        que dois cartões seguidos se atropelem quando o palco é baixo,
        como no celular. */
-    scale(calc(1 - var(--au, 0) * var(--encolhe, .18)));
+    /* Dois fatores multiplicados: o encolhimento por distância do meio,
+       que dá a profundidade, e o de caber — medido no JavaScript, vale 1
+       quando o cartão já cabe no palco e diminui só o necessário quando
+       a tela é baixa demais. */
+    scale(calc((1 - var(--au, 0) * var(--encolhe, .18)) * var(--cabe, 1)));
   opacity: var(--o, 1);
   will-change: transform, opacity;
   box-shadow: var(--sombra-forte);
