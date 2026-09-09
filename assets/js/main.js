@@ -228,9 +228,18 @@
       ? '<img src="assets/img/' + p.foto + '" alt="' + p.nome + '" loading="lazy" decoding="async" width="400" height="300">'
       : Ilustracoes.substitutoFoto(p.cat, p.nome);
 
-    const tags = (p.tags || [])
-      .map((t) => '<span class="produto__tag">' + t + '</span>')
-      .join('');
+    const listaTags = p.tags || [];
+    const tags = listaTags.map((t) => '<span class="produto__tag">' + t + '</span>').join('');
+
+    /* No celular só cabe um tamanho por cartão. Sem este contador o
+       produto parecia existir num tamanho só, que é justamente o que o
+       cliente pergunta antes de tudo. No computador ele fica escondido,
+       porque lá a lista inteira aparece. */
+    const restantes = listaTags.length - 1;
+    const mais =
+      restantes > 0
+        ? '<span class="produto__tag produto__tag--mais">+' + restantes + '</span>'
+        : '';
 
     const msg =
       'Olá, Gilson! Vim pelo site da OrtoGold e tenho interesse em: ' +
@@ -242,9 +251,14 @@
       '<div class="produto__corpo">' +
       '<h3 class="produto__nome">' + p.nome + '</h3>' +
       '<p class="produto__desc">' + p.descricao + '</p>' +
-      (tags ? '<div class="produto__tags">' + tags + '</div>' : '') +
+      (tags ? '<div class="produto__tags">' + tags + mais + '</div>' : '') +
+      /* Dois rótulos, um só visível. Com dois produtos por linha no
+         celular o cartão tem uns 160px de largura, e "Perguntar ao
+         Gilson" quebrava em duas linhas dentro do botão. */
       '<a class="botao botao--zap" href="' + linkZap(msg) + '" target="_blank" rel="noopener">' +
-      '<span class="botao__ico" data-icone="whatsapp"></span><span>Perguntar ao Gilson</span></a>' +
+      '<span class="botao__ico" data-icone="whatsapp"></span>' +
+      '<span class="rotulo">Perguntar ao Gilson</span>' +
+      '<span class="rotulo rotulo--curto">Perguntar</span></a>' +
       '</div></article>'
     );
   }
@@ -262,35 +276,29 @@
     ).join('');
     ligarIcones(abas);
 
-    // A grade é reescrita a cada troca de categoria, então os cartões
-    // novos precisam ser remontados no trilho da vitrine.
-    const secaoVitrine = $('#vitrine');
-    const palco = secaoVitrine && $('.vitrine__palco', secaoVitrine);
-    const vitrine =
-      window.Vitrine && secaoVitrine && palco
-        ? new window.Vitrine(secaoVitrine, palco, grade)
-        : null;
-
-    // recomecar liga quando a troca partiu de um clique na aba: aí o
-    // trilho roda de novo desde o primeiro produto da categoria nova.
-    function mostrar(cat, recomecar) {
+    function mostrar(cat) {
       const itens = PRODUTOS.filter((p) => p.cat === cat);
       grade.innerHTML = itens.length
         ? itens.map(cartaoProduto).join('')
         : '<p class="secao__texto">Em breve. Fale com o Gilson que ele te conta o que temos disponível.</p>';
       ligarIcones(grade);
       grade.setAttribute('aria-labelledby', 'aba-' + cat);
-      if (vitrine) vitrine.montar(recomecar);
     }
 
     abas.addEventListener('click', (ev) => {
       const botao = ev.target.closest('.aba');
       if (!botao) return;
       $$('.aba', abas).forEach((b) => b.setAttribute('aria-selected', String(b === botao)));
-      mostrar(botao.dataset.cat, true);
+      mostrar(botao.dataset.cat);
+
+      /* Trocou de categoria: leva a pessoa para o começo da grade nova.
+         Sem isto, quem estava no fim de uma lista longa cai no meio da
+         próxima sem entender o que mudou. */
+      const caixa = $('.abas-caixa');
+      if (caixa) caixa.scrollIntoView({ block: 'start', behavior: 'smooth' });
     });
 
-    mostrar(CATEGORIAS[0].id, false);
+    mostrar(CATEGORIAS[0].id);
     navegarAbas(abas);
   }
 

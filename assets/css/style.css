@@ -482,131 +482,16 @@ button { font: inherit; cursor: pointer; }
 }
 .abas-trilho.esta-arrastando .abas-trilho__bolinha { background: var(--azul-claro); }
 
-.produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-
-/* ---- VITRINE: o palco onde os produtos passam com o scroll ----
-   Sem o data-palco isto tudo é inerte e a grade fica como sempre foi.
-   O JS só liga depois de confirmar altura de tela, movimento não
-   reduzido e pelo menos dois produtos. */
-/* O que fica preso na tela é o bloco inteiro — sobrancelha, título,
-   texto e abas — e não só o palco. Assim a pessoa nunca perde de vista
-   o que está vendo nem em qual categoria está enquanto os produtos
-   passam. O topo do site já é sticky, então o palco começa abaixo dele. */
-/* O palco toma a tela inteira: começa em 0 e não desconta o cabeçalho,
-   porque enquanto a seção está presa o cabeçalho sai de cena (ver
-   `html[data-vitrine-presa]` mais abaixo). Sem isso sobrava pouca altura
-   no celular — o navegador já come um pedaço em cima e outro embaixo — e
-   o cartão saía cortado dos dois lados.
-
-   svh é a altura da tela com as barras do navegador ABERTAS, o menor
-   valor possível. Com vh o bloco ficava mais alto do que o visível
-   sempre que as barras estavam à mostra, e o pé do cartão sumia. O vh
-   antes fica de reserva para navegador velho que não conhece svh. */
-.vitrine[data-palco="ativo"] .vitrine__fixo {
-  position: sticky; top: 0;
-  height: 100vh;
-  height: 100svh;
-  display: flex; flex-direction: column;
-  background: var(--branco);
+/* Grade de loja, do jeito que todo mundo já sabe usar: três por linha no
+   computador, dois no celular. A versão em que os produtos passavam
+   presos na tela foi testada com gente de verdade e reprovada — ninguém
+   entendia o que estava vendo nem como mexer. */
+.produtos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 
-/* Enquanto a seção dos produtos está presa na tela, o cabeçalho sai da
-   frente. Quem liga e desliga este atributo é o trilho, e ele respeita o
-   menu do celular aberto — sumir com o cabeçalho ali levaria junto a
-   única navegação da tela. */
-html[data-vitrine-presa] .topo {
-  transform: translateY(-100%);
-  /* Escondido mas ainda no lugar: sem isto continuaria roubando o
-     toque na faixa de cima da tela. */
-  pointer-events: none;
-}
-
-/* min-height: 0 nos dois: item flex não encolhe abaixo do conteúdo sem
-   isso, e o palco acabaria mais alto que a tela. */
-.vitrine[data-palco="ativo"] .vitrine__fixo > .limite,
-.vitrine[data-palco="ativo"] .catalogo {
-  flex: 1; min-height: 0; display: flex; flex-direction: column;
-}
-.vitrine[data-palco="ativo"] .abas-caixa { flex: none; }
-
-/* O trilho vive só na sobra abaixo das abas. O recorte impede que um
-   cartão suba por cima do título no meio do percurso. */
-.vitrine[data-palco="ativo"] .vitrine__palco {
-  flex: 1; min-height: 0; position: relative; overflow: hidden;
-}
-
-/* A perspectiva mora aqui, no pai direto dos cartões, e o espaço 3D NÃO
-   é compartilhado entre eles (transform-style continua o `flat` padrão).
-
-   Com preserve-3d os cartões dividiam um espaço 3D só, e o navegador
-   passava a desenhá-los pela geometria em vez da ordem de pintura. Na
-   troca de um produto para o outro os dois vizinhos ficam à mesma
-   distância da câmera (o z é u², igual para +u e -u) e inclinados para
-   lados opostos: os dois planos se cruzam, o navegador não tem como
-   decidir qual fica na frente e a cada quadro escolhia um — era isso
-   que piscava.
-
-   Achatado, cada cartão é projetado sozinho, continua com a mesma
-   perspectiva, e quem fica na frente é decidido pelo z-index. */
-.vitrine[data-palco="ativo"] .produtos {
-  display: block; position: absolute; inset: 0;
-  perspective: 1500px;
-  /* A câmera fica um pouco acima do meio: o cartão passa reto na altura
-     do olhar, e não na barriga da tela. */
-  perspective-origin: 50% 42%;
-}
-
-/* O trilho, medido no site de referência: o cartão entra pelo canto de
-   cima à direita deitado, desce na diagonal passando reto e colado na
-   câmera no meio da tela, e sai pelo canto de baixo à esquerda deitado
-   para o outro lado.
-
-       u = +1   em cima, à direita, deitado
-       u =  0   no meio, reto, perto da câmera
-       u = -1   embaixo, à esquerda, deitado
-
-   O y é invertido de propósito: u positivo é topo, e no CSS topo é y
-   negativo. O z usa u² para afastar nas duas pontas por igual.
-
-   O seletor é longo de propósito: precisa vencer o `.produto:hover`,
-   que senão empurraria o cartão para fora da posição calculada. */
-.vitrine[data-palco="ativo"] .produto[data-palco] {
-  position: absolute; top: 50%; left: 50%;
-  width: min(430px, 88vw);
-  transform:
-    translate(-50%, -50%)
-    translate3d(
-      calc(var(--u, 0) * var(--desvio, 240px)),
-      calc(var(--u, 0) * -1 * var(--alcance, 380px)),
-      calc(var(--u, 0) * var(--u, 0) * -260px)
-    )
-    rotateX(calc(var(--u, 0) * 44deg))
-    /* Quem está longe do centro encolhe. Serve a dois propósitos: dá a
-       leitura de profundidade — o produto da vez é o grande — e evita
-       que dois cartões seguidos se atropelem quando o palco é baixo,
-       como no celular. */
-    /* Dois fatores multiplicados: o encolhimento por distância do meio,
-       que dá a profundidade, e o de caber — medido no JavaScript, vale 1
-       quando o cartão já cabe no palco e diminui só o necessário quando
-       a tela é baixa demais. */
-    scale(calc((1 - var(--au, 0) * var(--encolhe, .18)) * var(--cabe, 1)));
-  opacity: var(--o, 1);
-  will-change: transform, opacity;
-  box-shadow: var(--sombra-forte);
-  /* Sem transição aqui, e isto não é detalhe.
-
-     `.produto` transiciona transform em .2s por causa do efeito de
-     passar o mouse na grade. No trilho o transform é reescrito a cada
-     quadro, então o navegador recomeçava uma transição de 200ms toda
-     vez — a suavização reiniciava do zero 60 vezes por segundo e o
-     cartão andava aos trancos. Quem suaviza o trilho é a perseguição
-     do JavaScript, não o CSS. */
-  transition: none;
-}
-
-/* No palco a foto encolhe para o cartão inteiro — foto, texto, tamanhos
-   e botão — caber numa tela só, sem rolar por dentro. */
-.vitrine[data-palco="ativo"] .produto__midia { aspect-ratio: 16 / 10; }
 
 .produto {
   display: flex; flex-direction: column;
@@ -632,6 +517,9 @@ html[data-vitrine-presa] .topo {
   font-size: .74rem; font-weight: 600; color: var(--azul);
   background: var(--azul-fundo); padding: 4px 10px; border-radius: 999px;
 }
+/* Contador de tamanhos que sobraram. Só existe no celular, onde a lista
+   é cortada; aqui a lista aparece inteira e ele seria ruído. */
+.produto__tag--mais { display: none; }
 .produto .botao { width: 100%; margin-top: 4px; }
 
 /* ------------------- SEÇÕES COM FILME ---------------------- */
@@ -1009,44 +897,58 @@ html[data-vitrine-presa] .topo {
 }
 
 @media (max-width: 560px) {
-  .produtos { grid-template-columns: 1fr; }
+  /* ---- GRADE DE PRODUTOS NO CELULAR ----
+     Dois por linha, como em qualquer loja de aplicativo. Em uma coluna
+     só cabia um produto por tela e a pessoa não tinha como comparar nem
+     perceber que havia mais coisa embaixo.
+
+     Numa tela de 375px cada cartão fica com uns 160px de largura, então
+     tudo aqui é sobre caber: foto menor, nome em duas linhas, descrição
+     fora e botão curto. */
+  .produtos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  .produto { border-radius: var(--raio); }
+  .produto__corpo { padding: 10px 11px 11px; gap: 7px; }
+
+  .produto__nome {
+    font-size: .87rem; line-height: 1.25;
+    /* Duas linhas no máximo: sem isto um nome comprido empurrava o botão
+       para baixo e os dois cartões da linha ficavam de alturas
+       diferentes. */
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* A descrição sai. Em 160px de largura ela virava um bloco de texto
+     miúdo que ninguém lê e que só empurrava o botão para fora da tela.
+     O texto continua no cartão do computador e na conversa do WhatsApp. */
+  .produto__desc { display: none; }
+
+  /* Os tamanhos ficam: é a primeira coisa que quem compra colchão
+     pergunta. Cabe um só, então mostra o primeiro e o contador do resto
+     — "Solteiro 88×188  +3". Cortar a lista sem o contador fazia o
+     produto parecer existir num tamanho único. */
+  .produto__tags { gap: 4px; flex-wrap: nowrap; }
+  .produto__tag { font-size: .66rem; padding: 3px 7px; display: none; }
+  .produto__tag:first-child,
+  .produto__tag--mais { display: inline-block; }
+
+  .produto .botao {
+    min-height: 38px; padding: 8px 10px; font-size: .8rem; gap: 6px;
+    /* Encosta no pé do cartão. Sem isto, um nome de duas linhas empurrava
+       o botão e os dois produtos da mesma linha ficavam com os botões em
+       alturas diferentes. */
+    margin-top: auto;
+  }
+  .produto .botao__ico { width: 15px; height: 15px; }
+  .produto .rotulo { display: none; }
+  .produto .rotulo--curto { display: inline; }
+
   /* No celular o dedo arrasta a faixa direto; as setas só roubariam
      largura das categorias. O trilho fica, mostrando onde a pessoa está. */
   .abas-seta { display: none; }
   .abas-trilho { width: 100%; }
 
-  /* ---- VITRINE NO CELULAR ----
-     Numa tela de 812px o cabeçalho comia 347px e sobravam 394px de
-     palco para um cartão de 346px: dois cartões seguidos se atropelavam.
-     Aqui o cabeçalho aperta, o cartão encurta e quem está fora do
-     centro encolhe mais, para o produto da vez ficar sozinho grande. */
-  .vitrine[data-palco="ativo"] .vitrine__palco { --encolhe: .34; }
-
-  .vitrine[data-palco="ativo"] .secao__cabeca { margin-bottom: 14px; }
-  .vitrine[data-palco="ativo"] .secao__cabeca .titulo { font-size: 1.75rem; }
-  .vitrine[data-palco="ativo"] .secao__cabeca .secao__texto {
-    font-size: .86rem; margin-bottom: 0;
-    /* Duas linhas bastam para situar; o texto inteiro já foi lido antes
-       de a seção prender. */
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .vitrine[data-palco="ativo"] .catalogo { gap: 14px; }
-  .vitrine[data-palco="ativo"] .produto__midia { aspect-ratio: 16 / 9; }
-  .vitrine[data-palco="ativo"] .produto__corpo { padding: 14px; gap: 8px; }
-  .vitrine[data-palco="ativo"] .produto__desc {
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  /* Uma fileira de tamanhos só. O cartão precisa caber no palco inteiro,
-     e a lista completa de medidas continua na grade, para quem chega com
-     movimento reduzido. */
-  .vitrine[data-palco="ativo"] .produto__tags {
-    max-height: 26px; overflow: hidden;
-  }
-  /* Precisa do [data-palco] para empatar com a regra do trilho, senão a
-     largura de lá vence esta. */
-  .vitrine[data-palco="ativo"] .produto[data-palco] { width: min(300px, 80vw); }
   .depoimentos__grade { grid-template-columns: 1fr; }
   /* Continua com dois por linha no celular: em uma coluna só o cartão
      fica alto demais e a faixa vira uma rolagem sem fim. */

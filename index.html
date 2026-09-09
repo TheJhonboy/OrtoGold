@@ -63,7 +63,7 @@
 </style>
 <noscript><style>.carregando{display:none}</style></noscript>
 
-<link rel="stylesheet" href="assets/css/style.css?v=26f2388e">
+<link rel="stylesheet" href="assets/css/style.css?v=7a05ad96">
 
 <!-- Primeiro quadro do filme do topo: sem isso o hero pisca escuro
      por um instante antes do canvas receber a primeira imagem. -->
@@ -199,12 +199,7 @@
 
 <!-- ============================ CATÁLOGO ============================= -->
 <section class="secao" id="catalogo">
-  <!-- A vitrine envolve o cabeçalho junto com o palco: assim o título, o
-       texto e as abas ficam presos na tela enquanto os produtos passam,
-       em vez de rolarem para fora no meio da animação. -->
-  <div class="vitrine" id="vitrine">
-   <div class="vitrine__fixo">
-    <div class="limite">
+  <div class="limite">
     <header class="secao__cabeca">
       <p class="sobrancelha"><span class="sobrancelha__risco"></span>Catálogo</p>
       <h2 class="titulo">O que a gente fabrica</h2>
@@ -235,14 +230,11 @@
           <span class="abas-trilho__bolinha" id="abas-bolinha"></span>
         </div>
       </div>
-      <!-- O palco só vira trilho quando o JS confirma que dá: tela alta o
-           bastante, movimento não reduzido, dois produtos ou mais. Fora
-           disso continua sendo a grade de sempre. -->
-      <div class="vitrine__palco">
-        <div class="produtos" id="produtos"></div>
-      </div>
+      <!-- Grade simples, dois produtos por linha no celular. O teste com
+           gente de verdade reprovou a versão em que os produtos passavam
+           presos na tela: ninguém entendia o que estava vendo. -->
+      <div class="produtos" id="produtos"></div>
     </div>
-   </div>
   </div>
 </section>
 
@@ -442,11 +434,10 @@
 </a>
 
 <script src="assets/js/carregando.js?v=811879b2"></script>
-<script src="assets/js/dados.js?v=b2dff607"></script>
+<script src="assets/js/dados.js?v=c280c44a"></script>
 <script src="assets/js/ilustracoes.js?v=55dab4bb"></script>
 <script src="assets/js/filme-scroll.js?v=49536d13"></script>
 <script src="assets/js/filme-video.js?v=a1515f3e"></script>
-<script src="assets/js/cartoes-scroll.js?v=1"></script>
-<script src="assets/js/main.js?v=9af63d59"></script>
+<script src="assets/js/main.js?v=8075c839"></script>
 </body>
 </html>
