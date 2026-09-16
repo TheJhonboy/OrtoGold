@@ -1,22 +1,22 @@
 /* ============================================================
-   ORTOGOLD — folha de estilo
-   Azul #343A9B · Dourado #D9B75C · Amarelo #F5C62F · Grafite #151719
+   ORTO PREMIUM — folha de estilo
+   Preto #17120A · Ouro #D9A21F · Amarelo #F5C62F — tirado do logo
    ============================================================ */
 
 :root {
-  --azul: #343a9b;
-  --azul-claro: #4a54c6;
-  --azul-fundo: #eef1ff;
-  --ouro: #d9b75c;
-  --ouro-claro: #f0d489;
+  --marca: #17120a;
+  --marca-claro: #3a2f1c;
+  --marca-fundo: #f7eed7;
+  --ouro: #d9a21f;
+  --ouro-claro: #f4cf6e;
   --amarelo: #f5c62f;
-  --grafite: #151719;
-  --breu: #0a0e1f;
-  --breu-2: #121738;
+  --grafite: #17140e;
+  --breu: #0c0a06;
+  --breu-2: #1c160c;
   --branco: #ffffff;
-  --cinza: #6b7280;
-  --cinza-claro: #f4f5f9;
-  --borda: #e3e6f2;
+  --cinza: #6f675a;
+  --cinza-claro: #f7f3ea;
+  --borda: #ebe3d1;
   --zap: #25d366;
 
   --display: 'Archivo', system-ui, sans-serif;
@@ -25,8 +25,8 @@
   --limite: 1180px;
   --raio: 16px;
   --raio-g: 24px;
-  --sombra: 0 18px 48px rgba(16, 22, 60, .1);
-  --sombra-forte: 0 24px 70px rgba(10, 14, 31, .28);
+  --sombra: 0 18px 48px rgba(30, 22, 8, .1);
+  --sombra-forte: 0 24px 70px rgba(12, 10, 6, .28);
 }
 
 * { box-sizing: border-box; }
@@ -52,7 +52,7 @@ button { font: inherit; cursor: pointer; }
 
 .pular {
   position: absolute; left: -9999px; top: 0; z-index: 999;
-  background: var(--azul); color: #fff; padding: 12px 20px; border-radius: 0 0 12px 0;
+  background: var(--marca); color: #fff; padding: 12px 20px; border-radius: 0 0 12px 0;
 }
 .pular:focus { left: 0; }
 
@@ -95,7 +95,7 @@ button { font: inherit; cursor: pointer; }
   display: flex; align-items: center; gap: 10px;
   font-family: var(--display); font-weight: 700;
   font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--azul); margin: 0 0 14px;
+  color: var(--marca); margin: 0 0 14px;
 }
 /* Vive sobre foto e vídeo, onde o fundo muda de quadro para quadro. O
    dourado sozinho já contrasta, mas a sombra é o que garante a leitura
@@ -103,9 +103,9 @@ button { font: inherit; cursor: pointer; }
 .sobrancelha--claro {
   color: var(--ouro-claro);
   font-weight: 800;
-  text-shadow: 0 1px 6px rgba(8, 10, 20, .85), 0 0 2px rgba(8, 10, 20, .9);
+  text-shadow: 0 1px 6px rgba(10, 8, 4, .85), 0 0 2px rgba(10, 8, 4, .9);
 }
-.sobrancelha--claro .sobrancelha__risco { box-shadow: 0 1px 4px rgba(8, 10, 20, .8); }
+.sobrancelha--claro .sobrancelha__risco { box-shadow: 0 1px 4px rgba(10, 8, 4, .8); }
 .sobrancelha__risco { width: 32px; height: 2px; background: currentColor; flex: none; border-radius: 2px; }
 
 .secao { padding: clamp(56px, 9vw, 104px) 0; }
@@ -113,8 +113,8 @@ button { font: inherit; cursor: pointer; }
 .secao__texto { color: var(--cinza); font-size: 1.02rem; margin: 0 0 22px; }
 .secao__texto--claro { color: rgba(255,255,255,.82); }
 
-.link-ouro { color: var(--azul); font-weight: 600; border-bottom: 2px solid var(--ouro); }
-.link-ouro:hover { color: var(--azul-claro); }
+.link-ouro { color: var(--marca); font-weight: 600; border-bottom: 2px solid var(--ouro); }
+.link-ouro:hover { color: var(--marca-claro); }
 
 /* --------------------------- BOTÕES ------------------------ */
 .botao {
@@ -122,17 +122,17 @@ button { font: inherit; cursor: pointer; }
   min-height: 46px; padding: 12px 22px;
   border: 2px solid transparent; border-radius: 999px;
   font-family: var(--display); font-weight: 700; font-size: .96rem;
-  background: var(--azul); color: #fff;
+  background: var(--marca); color: #fff;
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
   cursor: pointer;
 }
-.botao:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(52,58,155,.3); }
+.botao:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(12,10,6,.3); }
 .botao:active { transform: translateY(0); }
 .botao--grande { min-height: 56px; padding: 16px 30px; font-size: 1.02rem; }
 .botao--zap { background: var(--zap); color: #05240f; }
 .botao--zap:hover { background: #1fbe5b; box-shadow: 0 12px 28px rgba(37,211,102,.34); }
 .botao--vazado { background: transparent; border-color: rgba(255,255,255,.45); color: #fff; }
-.botao--vazado:hover { border-color: var(--ouro); background: rgba(217,183,92,.12); box-shadow: none; }
+.botao--vazado:hover { border-color: var(--ouro); background: rgba(217,162,31,.12); box-shadow: none; }
 .botao--escuro { background: var(--grafite); }
 .botao__ico { width: 20px; height: 20px; flex: none; display: block; }
 /* Rótulo curto só existe no celular; ver o bloco de 860px. */
@@ -142,13 +142,13 @@ button { font: inherit; cursor: pointer; }
 /* -------------------------- CABEÇALHO ---------------------- */
 .topo {
   position: sticky; top: 0; z-index: 60;
-  background: rgba(10,14,31,.82);
+  background: rgba(12,10,6,.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255,255,255,.08);
   transition: background .25s ease, transform .3s ease;
 }
-.topo--rolado { background: rgba(10,14,31,.96); }
+.topo--rolado { background: rgba(12,10,6,.96); }
 
 /* Some ao descer, volta ao subir. Quem está descendo quer ver o site;
    quem sobe está procurando o menu. Continua sticky: só sai de vista,
@@ -160,11 +160,14 @@ button { font: inherit; cursor: pointer; }
   display: flex; align-items: center; gap: 20px;
 }
 
-.marca { display: flex; align-items: center; gap: 11px; color: #fff; }
-/* Símbolo OG oficial da marca. Fica sobre fundo escuro no
-   cabeçalho e no rodapé, por isso não leva caixa nem borda. */
-.marca__og { width: 40px; height: 40px; flex: none; object-fit: contain; }
-.marca__nome { font-family: var(--display); font-weight: 700; font-size: 1.16rem; letter-spacing: -.01em; }
+.marca { display: flex; align-items: center; color: #fff; }
+/* Logo Orto Premium em vetor, fundo transparente. Vive só sobre fundo
+   escuro — cabeçalho, rodapé e tela de carregamento — porque as letras
+   brancas dele somem sobre claro.
+
+   A altura é o que manda. Abaixo de uns 46px o "remium" começa a
+   embolar; acima de 58px o cabeçalho engorda e rouba tela do celular. */
+.marca__logo { height: 54px; width: auto; flex: none; }
 
 .menu { margin-left: auto; display: flex; gap: 26px; }
 .menu a { color: rgba(255,255,255,.78); font-weight: 400; font-size: .94rem; padding: 6px 0; position: relative; }
@@ -222,19 +225,19 @@ button { font: inherit; cursor: pointer; }
 .hero__ambiente {
   position: absolute; inset: 0;
   background:
-    radial-gradient(80% 70% at 12% 88%, rgba(217,183,92,.14), transparent 60%),
-    linear-gradient(180deg, rgba(10,14,31,.62) 0%, rgba(10,14,31,.5) 40%, rgba(10,14,31,.92) 100%),
-    linear-gradient(150deg, #141829 0%, var(--breu) 62%);
+    radial-gradient(80% 70% at 12% 88%, rgba(217,162,31,.14), transparent 60%),
+    linear-gradient(180deg, rgba(12,10,6,.62) 0%, rgba(12,10,6,.5) 40%, rgba(12,10,6,.92) 100%),
+    linear-gradient(150deg, #1a150c 0%, var(--breu) 62%);
 }
 /* Com o filme rodando o fundo é só sombra neutra: nada de cor
    por cima, senão a imagem da fábrica perde o contraste. */
 .hero[data-filme="ativo"] .hero__ambiente {
   background:
-    linear-gradient(180deg, rgba(8,10,20,.66) 0%, rgba(8,10,20,.30) 40%, rgba(8,10,20,.90) 100%);
+    linear-gradient(180deg, rgba(10,8,4,.66) 0%, rgba(10,8,4,.30) 40%, rgba(10,8,4,.90) 100%);
 }
 .hero__ambiente::after {
   content: ''; position: absolute; inset: 0;
-  box-shadow: inset 0 0 190px 60px rgba(10,14,31,.9);
+  box-shadow: inset 0 0 190px 60px rgba(12,10,6,.9);
 }
 
 .hero__conteudo {
@@ -267,7 +270,7 @@ button { font: inherit; cursor: pointer; }
 .hero__texto {
   color: rgba(255,255,255,.92); font-size: 1.06rem; font-weight: 600;
   max-width: 44ch; margin: 0 0 28px;
-  text-shadow: 0 1px 8px rgba(8, 10, 20, .7);
+  text-shadow: 0 1px 8px rgba(10, 8, 4, .7);
 }
 .hero__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
 .hero__selos { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -278,11 +281,11 @@ button { font: inherit; cursor: pointer; }
   background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.16);
   color: rgba(255,255,255,.9); font-size: .84rem; font-weight: 400;
 }
-.selo--ouro { border-color: rgba(217,183,92,.42); color: var(--ouro-claro); }
+.selo--ouro { border-color: rgba(217,162,31,.42); color: var(--ouro-claro); }
 .selo__ico { width: 17px; height: 17px; }
 .selo__ico svg { width: 100%; height: 100%; }
 .selo__ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--zap); flex: none; }
-.selo__ponto--off { background: #9aa0b4; }
+.selo__ponto--off { background: #a39a88; }
 
 .hero__rolar {
   position: absolute; left: 50%; bottom: 22px; z-index: 3; margin: 0;
@@ -307,7 +310,7 @@ button { font: inherit; cursor: pointer; }
   width: 106px; height: 106px; display: grid; place-items: center;
 }
 .carimbo svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: girar 22s linear infinite; }
-.carimbo text { font-family: var(--display); font-size: 9.4px; font-weight: 700; letter-spacing: .18em; fill: rgba(217,183,92,.85); }
+.carimbo text { font-family: var(--display); font-size: 9.4px; font-weight: 700; letter-spacing: .18em; fill: rgba(217,162,31,.85); }
 .carimbo__miolo { width: 30px; height: 30px; color: rgba(255,255,255,.7); }
 .carimbo__miolo svg { position: static; animation: none; width: 100%; height: 100%; }
 @keyframes girar { to { transform: rotate(360deg); } }
@@ -373,9 +376,9 @@ button { font: inherit; cursor: pointer; }
   content: ''; position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(10, 14, 31, 0) 28%,
-    rgba(10, 14, 31, .38) 56%,
-    rgba(10, 14, 31, .9) 100%
+    rgba(12, 10, 6, 0) 28%,
+    rgba(12, 10, 6, .38) 56%,
+    rgba(12, 10, 6, .9) 100%
   );
 }
 
@@ -383,7 +386,7 @@ button { font: inherit; cursor: pointer; }
   position: absolute; top: 16px; left: 16px; z-index: 2;
   width: 46px; height: 46px; padding: 10px; border-radius: 14px;
   color: var(--breu); background: var(--ouro);
-  box-shadow: 0 10px 24px rgba(10, 14, 31, .35);
+  box-shadow: 0 10px 24px rgba(12, 10, 6, .35);
   transition: transform .45s cubic-bezier(.34, 1.56, .64, 1);
 }
 .destaque:hover .destaque__ico { transform: translateY(-3px) rotate(-5deg); }
@@ -401,12 +404,12 @@ button { font: inherit; cursor: pointer; }
 .destaque:hover .destaque__texto::before { width: 58px; }
 .destaque__texto strong {
   display: block; font-family: var(--display); font-size: 1.06rem; line-height: 1.25;
-  text-shadow: 0 1px 8px rgba(8, 10, 20, .6);
+  text-shadow: 0 1px 8px rgba(10, 8, 4, .6);
 }
 .destaque__texto span {
   display: block; font-size: .86rem; margin-top: 3px;
   color: rgba(255, 255, 255, .84);
-  text-shadow: 0 1px 8px rgba(8, 10, 20, .6);
+  text-shadow: 0 1px 8px rgba(10, 8, 4, .6);
 }
 
 /* --------------------------- CATÁLOGO ---------------------- */
@@ -443,24 +446,24 @@ button { font: inherit; cursor: pointer; }
   font-family: var(--display); font-weight: 700; font-size: .96rem; color: var(--grafite);
   text-align: left; transition: all .18s ease;
 }
-.aba__ico { width: 26px; height: 26px; flex: none; color: var(--azul); }
+.aba__ico { width: 26px; height: 26px; flex: none; color: var(--marca); }
 .aba__ico svg { width: 100%; height: 100%; }
-.aba:hover { border-color: var(--azul-claro); }
-.aba[aria-selected="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
+.aba:hover { border-color: var(--marca-claro); }
+.aba[aria-selected="true"] { background: var(--marca); border-color: var(--marca); color: #fff; }
 .aba[aria-selected="true"] .aba__ico { color: var(--ouro); }
 
 /* Setas: só existem no HTML quando há o que rolar. O JS tira o hidden. */
 .abas-seta {
   flex: none; width: 42px; height: 42px; border-radius: 50%;
-  border: 1.5px solid var(--borda); background: #fff; color: var(--azul);
+  border: 1.5px solid var(--borda); background: #fff; color: var(--marca);
   display: grid; place-items: center; cursor: pointer; transition: all .18s ease;
 }
 /* Sem isto o display acima venceria o [hidden] do navegador e a seta
    apareceria mesmo quando não há o que rolar. */
 .abas-seta[hidden], .abas-trilho[hidden] { display: none; }
-.abas-seta:hover { border-color: var(--azul-claro); color: var(--azul-claro); }
+.abas-seta:hover { border-color: var(--marca-claro); color: var(--marca-claro); }
 .abas-seta[disabled] { opacity: .3; cursor: default; }
-.abas-seta[disabled]:hover { border-color: var(--borda); color: var(--azul); }
+.abas-seta[disabled]:hover { border-color: var(--borda); color: var(--marca); }
 .abas-seta__ico { width: 16px; height: 16px; display: block; }
 .abas-seta__ico svg { width: 100%; height: 100%; }
 .abas-seta--antes .abas-seta__ico { transform: rotate(180deg); }
@@ -476,11 +479,11 @@ button { font: inherit; cursor: pointer; }
 .abas-trilho__bolinha {
   position: absolute; top: 50%; left: calc(9px + var(--pos, 0) * (100% - 18px));
   width: 18px; height: 18px; border-radius: 50%;
-  background: var(--azul); border: 3px solid #fff;
-  box-shadow: 0 2px 8px rgba(16, 22, 60, .28);
+  background: var(--marca); border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(30, 22, 8, .28);
   transform: translate(-50%, -50%);
 }
-.abas-trilho.esta-arrastando .abas-trilho__bolinha { background: var(--azul-claro); }
+.abas-trilho.esta-arrastando .abas-trilho__bolinha { background: var(--marca-claro); }
 
 /* Grade de loja, do jeito que todo mundo já sabe usar: três por linha no
    computador, dois no celular. A versão em que os produtos passavam
@@ -514,8 +517,8 @@ button { font: inherit; cursor: pointer; }
 .produto__desc { font-size: .89rem; color: var(--cinza); margin: 0; flex: 1; }
 .produto__tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .produto__tag {
-  font-size: .74rem; font-weight: 600; color: var(--azul);
-  background: var(--azul-fundo); padding: 4px 10px; border-radius: 999px;
+  font-size: .74rem; font-weight: 600; color: var(--marca);
+  background: var(--marca-fundo); padding: 4px 10px; border-radius: 999px;
 }
 /* Contador de tamanhos que sobraram. Só existe no celular, onde a lista
    é cortada; aqui a lista aparece inteira e ele seria ruído. */
@@ -544,19 +547,19 @@ button { font: inherit; cursor: pointer; }
 .filme-secao__ambiente {
   position: absolute; inset: 0;
   background:
-    linear-gradient(105deg, rgba(10,14,31,.94) 0%, rgba(10,14,31,.72) 46%, rgba(10,14,31,.42) 100%),
-    linear-gradient(160deg, #171d47, var(--breu));
+    linear-gradient(105deg, rgba(12,10,6,.94) 0%, rgba(12,10,6,.72) 46%, rgba(12,10,6,.42) 100%),
+    linear-gradient(160deg, #231b0d, var(--breu));
 }
 .filme-secao[data-filme="ativo"] .filme-secao__ambiente {
-  background: linear-gradient(105deg, rgba(10,14,31,.92) 0%, rgba(10,14,31,.66) 48%, rgba(10,14,31,.3) 100%);
+  background: linear-gradient(105deg, rgba(12,10,6,.92) 0%, rgba(12,10,6,.66) 48%, rgba(12,10,6,.3) 100%);
 }
 .filme-secao--claro .filme-secao__ambiente {
   background:
-    linear-gradient(180deg, rgba(10,14,31,.78), rgba(10,14,31,.6) 45%, rgba(10,14,31,.88)),
-    linear-gradient(160deg, #1d2450, var(--breu));
+    linear-gradient(180deg, rgba(12,10,6,.78), rgba(12,10,6,.6) 45%, rgba(12,10,6,.88)),
+    linear-gradient(160deg, #2a200f, var(--breu));
 }
 .filme-secao--claro[data-filme="ativo"] .filme-secao__ambiente {
-  background: linear-gradient(180deg, rgba(10,14,31,.72), rgba(10,14,31,.44) 45%, rgba(10,14,31,.86));
+  background: linear-gradient(180deg, rgba(12,10,6,.72), rgba(12,10,6,.44) 45%, rgba(12,10,6,.86));
 }
 
 .filme-secao__conteudo { position: relative; z-index: 2; padding-block: 80px; }
@@ -637,7 +640,7 @@ button { font: inherit; cursor: pointer; }
 .etapa--atual {
   opacity: 1;
   background: rgba(255,255,255,.07);
-  border-color: rgba(217,183,92,.4);
+  border-color: rgba(217,162,31,.4);
 }
 .etapa--atual .etapa__num { background: var(--ouro); border-color: var(--ouro); color: var(--breu); }
 
@@ -645,7 +648,7 @@ button { font: inherit; cursor: pointer; }
   margin-top: 22px; max-width: 560px; height: 4px; border-radius: 4px;
   background: rgba(255,255,255,.14); overflow: hidden;
 }
-.etapas__barra span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--azul-claro), var(--ouro)); transition: width .15s linear; }
+.etapas__barra span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--marca-claro), var(--ouro)); transition: width .15s linear; }
 
 /* -------------------------- CONSULTOR ---------------------- */
 .consultor { background: var(--cinza-claro); }
@@ -656,7 +659,7 @@ button { font: inherit; cursor: pointer; }
 .lista-checada li::before {
   content: ''; position: absolute; left: 0; top: .38em;
   width: 18px; height: 18px; border-radius: 50%;
-  background: var(--azul);
+  background: var(--marca);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z' fill='%23000'/%3E%3C/svg%3E") center / 16px no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z' fill='%23000'/%3E%3C/svg%3E") center / 16px no-repeat;
 }
@@ -664,7 +667,7 @@ button { font: inherit; cursor: pointer; }
 
 .consultor__cartao {
   margin: 0; border-radius: var(--raio-g); overflow: hidden;
-  background: linear-gradient(165deg, var(--azul-claro), var(--azul) 55%, #232a72);
+  background: linear-gradient(165deg, var(--marca-claro), var(--marca) 55%, #0c0a06);
   box-shadow: var(--sombra-forte);
 }
 .consultor__foto {
@@ -673,7 +676,7 @@ button { font: inherit; cursor: pointer; }
 }
 .consultor__foto::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(70% 60% at 50% 78%, rgba(217,183,92,.34), transparent 68%);
+  background: radial-gradient(70% 60% at 50% 78%, rgba(217,162,31,.34), transparent 68%);
 }
 /* Com a foto de verdade do Gilson: ela preenche o quadro inteiro
    e ganha um degradê por cima, que escurece o pé da imagem e
@@ -687,15 +690,15 @@ button { font: inherit; cursor: pointer; }
 .consultor__foto::after {
   content: ''; position: absolute; inset: 0; z-index: 2;
   background:
-    linear-gradient(to top, rgba(10, 14, 31, .62), rgba(10, 14, 31, .12) 38%, transparent 62%),
-    radial-gradient(78% 55% at 50% 4%, rgba(217, 183, 92, .2), transparent 70%);
+    linear-gradient(to top, rgba(12, 10, 6, .62), rgba(12, 10, 6, .12) 38%, transparent 62%),
+    radial-gradient(78% 55% at 50% 4%, rgba(217, 162, 31, .2), transparent 70%);
 }
 /* O avatar desenhado (usado só se a foto sumir) fica na mesma
    camada da foto, por baixo do degradê. */
 .consultor__foto svg { position: relative; z-index: 1; }
 .consultor__cartao figcaption {
   padding: 20px 22px 24px; color: #fff;
-  background: rgba(10,14,31,.42); backdrop-filter: blur(6px);
+  background: rgba(12,10,6,.42); backdrop-filter: blur(6px);
 }
 .consultor__cartao strong { display: block; font-family: var(--display); font-size: 1.3rem; }
 .consultor__cartao span { display: block; font-size: .88rem; color: rgba(255,255,255,.75); }
@@ -707,12 +710,12 @@ button { font: inherit; cursor: pointer; }
   border: 1.5px solid var(--borda); border-radius: var(--raio-g);
   padding: 24px; background: #fff; display: flex; flex-direction: column; gap: 14px;
 }
-.depoimento__texto { margin: 0; font-size: .96rem; color: #3a3f4d; flex: 1; }
+.depoimento__texto { margin: 0; font-size: .96rem; color: #3d372c; flex: 1; }
 .depoimento__pe { display: flex; align-items: center; gap: 12px; }
 .depoimento__iniciais {
   width: 42px; height: 42px; border-radius: 50%; flex: none;
   display: grid; place-items: center;
-  background: var(--azul); color: var(--ouro-claro);
+  background: var(--marca); color: var(--ouro-claro);
   font-family: var(--display); font-weight: 700; font-size: .92rem;
 }
 .depoimento__pe strong { display: block; font-size: .95rem; }
@@ -733,7 +736,7 @@ button { font: inherit; cursor: pointer; }
 
 .dado { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--borda); }
 .dado:first-of-type { border-top: 0; }
-.dado__ico { width: 40px; height: 40px; color: var(--azul); background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--borda); }
+.dado__ico { width: 40px; height: 40px; color: var(--marca); background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--borda); }
 .dado__ico svg { width: 100%; height: 100%; }
 .dado strong { font-family: var(--display); font-size: 1rem; display: block; margin-bottom: 4px; }
 .dado p { margin: 0 0 6px; color: var(--cinza); font-size: .95rem; }
@@ -748,9 +751,9 @@ button { font: inherit; cursor: pointer; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
   padding: 32px; text-align: center;
   background:
-    radial-gradient(60% 60% at 50% 40%, rgba(52,58,155,.1), transparent 70%),
-    repeating-linear-gradient(45deg, #eef1ff 0 18px, #e6eaff 18px 36px);
-  color: var(--azul);
+    radial-gradient(60% 60% at 50% 40%, rgba(217,162,31,.1), transparent 70%),
+    repeating-linear-gradient(45deg, #f7f0df 0 18px, #efe5cc 18px 36px);
+  color: var(--marca);
 }
 .mapa-capa__ico { width: 44px; height: 44px; }
 .mapa-capa__ico svg { width: 100%; height: 100%; }
@@ -762,9 +765,9 @@ button { font: inherit; cursor: pointer; }
 .chamada {
   position: relative; overflow: hidden;
   background:
-    radial-gradient(90% 120% at 15% 15%, rgba(74,84,198,.44), transparent 60%),
-    radial-gradient(70% 90% at 88% 84%, rgba(217,183,92,.2), transparent 62%),
-    linear-gradient(150deg, #171d47, var(--breu));
+    radial-gradient(90% 120% at 15% 15%, rgba(217,162,31,.30), transparent 60%),
+    radial-gradient(70% 90% at 88% 84%, rgba(217,162,31,.2), transparent 62%),
+    linear-gradient(150deg, #231b0d, var(--breu));
   padding: clamp(66px, 10vw, 120px) 0;
 }
 .chamada__interno { text-align: center; max-width: 760px; }
@@ -776,8 +779,16 @@ button { font: inherit; cursor: pointer; }
 .rodape strong { display: block; font-family: var(--display); color: #fff; margin-bottom: 14px; font-size: 1rem; }
 .rodape ul { display: grid; gap: 9px; font-size: .92rem; }
 .rodape a:hover { color: #fff; }
+/* O link de ouro nasce na cor da marca, que agora é preta. No rodapé o
+   fundo também é preto: sem esta regra o telefone e o Instagram sumiam e
+   só sobrava o sublinhado dourado flutuando. */
+.rodape .link-ouro { color: var(--ouro-claro); }
+.rodape .link-ouro:hover { color: #fff; }
 .rodape__texto { font-size: .93rem; margin: 16px 0 0; }
 .marca--rodape { color: #fff; }
+/* No rodapé sobra espaço: o logo aparece grande, do jeito que foi
+   desenhado para ser visto. */
+.marca--rodape .marca__logo { height: 84px; }
 .rodape__fim {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
   margin-top: 40px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.1);
@@ -790,15 +801,15 @@ button { font: inherit; cursor: pointer; }
   position: fixed; right: 20px; bottom: 20px; z-index: 70;
   display: flex; align-items: center; gap: 12px;
   padding: 10px 18px 10px 10px; border-radius: 999px;
-  background: rgba(10,14,31,.94); color: #fff;
-  border: 1px solid rgba(217,183,92,.4);
+  background: rgba(12,10,6,.94); color: #fff;
+  border: 1px solid rgba(217,162,31,.4);
   box-shadow: var(--sombra-forte);
   transition: transform .2s ease;
 }
 .flutuante:hover { transform: translateY(-3px); }
 .flutuante__avatar {
   width: 52px; height: 52px; flex: none; border-radius: 50%; overflow: hidden;
-  background: linear-gradient(160deg, var(--azul-claro), var(--azul));
+  background: linear-gradient(160deg, var(--marca-claro), var(--marca));
   border: 2px solid var(--ouro); display: grid; place-items: center;
 }
 .flutuante__avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -839,6 +850,9 @@ button { font: inherit; cursor: pointer; }
 @media (max-width: 860px) {
   .menu, .topo__zap { display: none; }
   .menu__abrir { display: flex; }
+  /* Um pouco menor no celular: o cabeçalho continua fino, e 48px ainda
+     deixa "Premium" e as estrelas legíveis. */
+  .marca__logo { height: 48px; }
   .flutuante__balao { display: none; }
   .flutuante { display: none; }
   .carimbo { display: none; }
@@ -890,9 +904,9 @@ button { font: inherit; cursor: pointer; }
   /* Sombra só nas pontas: o miolo do quadro fica limpo. */
   .hero[data-filme="ativo"] .hero__ambiente {
     background:
-      linear-gradient(180deg, rgba(8,10,20,.62) 0%, rgba(8,10,20,.16) 42%, rgba(8,10,20,.20) 62%, rgba(8,10,20,.88) 100%);
+      linear-gradient(180deg, rgba(10,8,4,.62) 0%, rgba(10,8,4,.16) 42%, rgba(10,8,4,.20) 62%, rgba(10,8,4,.88) 100%);
   }
-  .hero__ambiente::after { box-shadow: inset 0 0 120px 30px rgba(8,10,20,.75); }
+  .hero__ambiente::after { box-shadow: inset 0 0 120px 30px rgba(10,8,4,.75); }
   .hero__canvas { object-position: 50% 38%; }
 }
 

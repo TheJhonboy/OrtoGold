@@ -1,5 +1,5 @@
 /* ============================================================
-   DADOS DO SITE — ORTOGOLD
+   DADOS DO SITE — ORTO PREMIUM
    ------------------------------------------------------------
    ESTE É O ÚNICO ARQUIVO QUE VOCÊ PRECISA MEXER.
    Aqui ficam: contato, endereço, horário, produtos e depoimentos.
@@ -7,7 +7,7 @@
    ============================================================ */
 
 const LOJA = {
-  nome: 'OrtoGold',
+  nome: 'Orto Premium',
   descricao: 'Fábrica de colchões e móveis para quarto em Goiânia',
 
   /* --- CONTATO -------------------------------------------------
@@ -69,7 +69,7 @@ const DESTAQUES = [
     foto: 'destaque-medida.webp',  alt: 'Cabeceira estofada feita na medida da cama' },
 
   { icone: 'atendente', titulo: 'Atendimento direto', texto: 'Fale com o Gilson',
-    foto: 'gilson-v2.webp',        alt: 'Gilson, consultor de vendas da OrtoGold' },
+    foto: 'gilson-v2.webp',        alt: 'Gilson, consultor de vendas da Orto Premium' },
 ];
 
 /* ============================================================
@@ -144,7 +144,7 @@ const CENAS = {
    CATÁLOGO
    ------------------------------------------------------------
    ATENÇÃO: os itens abaixo são um ESQUELETO para você preencher.
-   Troque o 'nome' e a 'descricao' pelos produtos que a OrtoGold
+   Troque o 'nome' e a 'descricao' pelos produtos que a Orto Premium
    realmente vende, e coloque a foto em assets/img/.
 
    NÃO existe preço aqui de propósito — o site inteiro leva a

@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OrtoGold — Fábrica de colchões e móveis em Goiânia</title>
+<title>Orto Premium — Fábrica de colchões e móveis em Goiânia</title>
 <meta name="description" content="Fábrica própria de colchões, camas box, cabeceiras e móveis para quarto no Setor Grajaú, Goiânia. Fale direto com o consultor Gilson pelo WhatsApp.">
-<meta name="theme-color" content="#0b1020">
+<meta name="theme-color" content="#0c0a06">
 <link rel="canonical" href="https://loja-de-estofados.vercel.app/">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="OrtoGold">
-<meta property="og:title" content="OrtoGold — Fábrica de colchões e móveis em Goiânia">
+<meta property="og:site_name" content="Orto Premium">
+<meta property="og:title" content="Orto Premium — Fábrica de colchões e móveis em Goiânia">
 <meta property="og:description" content="Direto de quem produz. Colchões, camas box, cabeceiras e móveis sob medida. Fale com o Gilson.">
 <meta property="og:url" content="https://loja-de-estofados.vercel.app/">
 <meta property="og:image" content="https://loja-de-estofados.vercel.app/assets/img/og-social.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="assets/img/simbolo.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/orto-premium-icone.svg" type="image/svg+xml">
 <link rel="alternate icon" href="assets/img/favicon-512.png" type="image/png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,22 +34,19 @@
   .carregando {
     position: fixed; inset: 0; z-index: 200;
     display: grid; place-content: center; justify-items: center; gap: 20px;
-    background: #0A0E1F;
+    background: #0C0A06;
     transition: opacity .45s ease, visibility .45s ease;
   }
   .carregando--fim { opacity: 0; visibility: hidden; pointer-events: none; }
-  .carregando__marca {
-    display: flex; align-items: center; gap: 12px; color: #fff;
-    font-family: Archivo, "Segoe UI", system-ui, sans-serif;
-    font-weight: 800; font-size: 1.55rem; letter-spacing: -.01em;
-  }
+  .carregando__marca { display: block; }
+  .carregando__marca img { display: block; width: min(260px, 64vw); height: auto; }
   .carregando__barra {
     width: min(240px, 62vw); height: 6px; border-radius: 999px;
     background: rgba(255,255,255,.13); overflow: hidden;
   }
   .carregando__barra span {
     display: block; width: 0; height: 100%; border-radius: 999px;
-    background: #25D366; transition: width .3s ease;
+    background: linear-gradient(90deg, #9c6507, #f4cf6e); transition: width .3s ease;
   }
   .carregando__texto {
     margin: 0; font-size: .8rem; color: rgba(255,255,255,.45);
@@ -63,7 +60,7 @@
 </style>
 <noscript><style>.carregando{display:none}</style></noscript>
 
-<link rel="stylesheet" href="assets/css/style.css?v=7a05ad96">
+<link rel="stylesheet" href="assets/css/style.css?v=40f80649">
 
 <!-- Primeiro quadro do filme do topo: sem isso o hero pisca escuro
      por um instante antes do canvas receber a primeira imagem. -->
@@ -73,8 +70,7 @@
 
 <div class="carregando" id="carregando" role="status" aria-live="polite" aria-label="Carregando o site">
   <span class="carregando__marca">
-    <img src="assets/img/simbolo.svg" alt="" width="40" height="40">
-    OrtoGold
+    <img src="assets/img/logo-orto-premium.svg" alt="Orto Premium" width="238" height="137">
   </span>
   <span class="carregando__barra"><span id="carregando-progresso"></span></span>
   <p class="carregando__texto">Carregando…</p>
@@ -85,9 +81,11 @@
 <!-- ============================ CABEÇALHO ============================ -->
 <header class="topo" id="topo">
   <div class="topo__interno">
-    <a class="marca" href="#topo" aria-label="OrtoGold, início">
-      <img class="marca__og" src="assets/img/simbolo-claro.svg" alt="" width="40" height="40">
-      <span class="marca__nome">OrtoGold</span>
+    <!-- O nome está escrito dentro do próprio logo, então não há texto ao
+         lado: repetir "Orto Premium" em fonte comum ao lado da arte só
+         brigaria com ela. -->
+    <a class="marca" href="#topo" aria-label="Orto Premium, início">
+      <img class="marca__logo" src="assets/img/logo-orto-premium.svg" alt="Orto Premium" width="95" height="55">
     </a>
 
     <nav class="menu" aria-label="Navegação principal">
@@ -179,7 +177,7 @@
     <div class="carimbo" aria-hidden="true">
       <svg viewBox="0 0 120 120">
         <defs><path id="circ" d="M60,60 m-42,0 a42,42 0 1,1 84,0 a42,42 0 1,1 -84,0"/></defs>
-        <text><textPath href="#circ">CONFORTO QUE VEM DA FÁBRICA · ORTOGOLD GOIÂNIA · </textPath></text>
+        <text><textPath href="#circ">CONFORTO QUE VEM DA FÁBRICA · ORTO PREMIUM GOIÂNIA · </textPath></text>
       </svg>
       <span class="carimbo__miolo" data-icone="colchao"></span>
     </div>
@@ -187,7 +185,7 @@
 </section>
 
 <!-- =========================== DESTAQUES ============================= -->
-<section class="destaques" aria-label="Diferenciais da OrtoGold">
+<section class="destaques" aria-label="Diferenciais da Orto Premium">
   <div class="limite">
     <header class="secao__cabeca destaques__cabeca">
       <p class="sobrancelha"><span class="sobrancelha__risco"></span>Por que comprar direto da fábrica</p>
@@ -290,7 +288,7 @@
       <div class="consultor__foto" id="gilson-corpo"></div>
       <figcaption>
         <strong>Gilson</strong>
-        <span>Consultor de vendas · OrtoGold</span>
+        <span>Consultor de vendas · Orto Premium</span>
         <span class="consultor__zap" id="consultor-numero"></span>
       </figcaption>
     </figure>
@@ -313,7 +311,7 @@
   <div class="limite redes__grade">
     <div class="redes__perfil">
       <p class="sobrancelha"><span class="sobrancelha__risco"></span>Nas redes</p>
-      <h2 class="titulo">Acompanhe a OrtoGold</h2>
+      <h2 class="titulo">Acompanhe a Orto Premium</h2>
       <p class="secao__texto">
         Novidades, modelos que acabaram de sair da fábrica e os quartos que a
         gente montou pelos clientes de Goiânia.
@@ -395,9 +393,8 @@
 <footer class="rodape">
   <div class="limite rodape__grade">
     <div>
-      <a class="marca marca--rodape" href="#topo">
-        <img class="marca__og" src="assets/img/simbolo-claro.svg" alt="" width="40" height="40">
-        <span class="marca__nome">OrtoGold</span>
+      <a class="marca marca--rodape" href="#topo" aria-label="Orto Premium, voltar ao início">
+        <img class="marca__logo" src="assets/img/logo-orto-premium.svg" alt="Orto Premium" width="138" height="80">
       </a>
       <p class="rodape__texto">Fábrica de colchões e móveis para quarto.<br>Goiânia — Goiás.</p>
     </div>
@@ -418,7 +415,7 @@
   </div>
 
   <div class="limite rodape__fim">
-    <span>© <span id="ano"></span> OrtoGold. Todos os direitos reservados.</span>
+    <span>© <span id="ano"></span> Orto Premium. Todos os direitos reservados.</span>
     <span class="rodape__credito">Site por <strong>Jhon</strong> · Automação e sites para negócios locais</span>
   </div>
 </footer>
@@ -428,16 +425,16 @@
   <span class="flutuante__avatar" id="gilson-rosto"></span>
   <span class="flutuante__balao">
     <strong>Fale com o Gilson</strong>
-    <small>Consultor OrtoGold</small>
+    <small>Consultor Orto Premium</small>
   </span>
   <span class="flutuante__zap" data-icone="whatsapp"></span>
 </a>
 
 <script src="assets/js/carregando.js?v=811879b2"></script>
-<script src="assets/js/dados.js?v=c280c44a"></script>
-<script src="assets/js/ilustracoes.js?v=55dab4bb"></script>
+<script src="assets/js/dados.js?v=559b34b8"></script>
+<script src="assets/js/ilustracoes.js?v=8843590f"></script>
 <script src="assets/js/filme-scroll.js?v=49536d13"></script>
 <script src="assets/js/filme-video.js?v=a1515f3e"></script>
-<script src="assets/js/main.js?v=8075c839"></script>
+<script src="assets/js/main.js?v=dddc21c4"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /* ============================================================
-   ORTOGOLD — interface
+   ORTO PREMIUM — interface
    Monta o site inteiro a partir do arquivo dados.js.
    ============================================================ */
 
@@ -13,15 +13,15 @@
      WHATSAPP
      --------------------------------------------------------- */
   const MENSAGENS = {
-    topo:       'Olá! Vim pelo site da OrtoGold e gostaria de falar com o Gilson.',
-    menu:       'Olá! Vim pelo site da OrtoGold e gostaria de falar com o Gilson.',
-    hero:       'Olá! Vim pelo site da OrtoGold. Quero saber mais sobre os produtos de vocês.',
-    cena:       'Olá, Gilson! Vim pelo site da OrtoGold. Quero montar meu quarto completo — colchão, base e cabeceira. Por onde começamos?',
-    consultor:  'Olá, Gilson! Vim pelo site da OrtoGold e queria um orçamento.',
-    casa:       'Olá! Vim pelo site da OrtoGold.',
-    final:      'Olá, Gilson! Vim pelo site da OrtoGold e quero saber as condições.',
-    flutuante:  'Olá, Gilson! Vim pelo site da OrtoGold.',
-    rodape:     'Olá! Vim pelo site da OrtoGold.',
+    topo:       'Olá! Vim pelo site da Orto Premium e gostaria de falar com o Gilson.',
+    menu:       'Olá! Vim pelo site da Orto Premium e gostaria de falar com o Gilson.',
+    hero:       'Olá! Vim pelo site da Orto Premium. Quero saber mais sobre os produtos de vocês.',
+    cena:       'Olá, Gilson! Vim pelo site da Orto Premium. Quero montar meu quarto completo — colchão, base e cabeceira. Por onde começamos?',
+    consultor:  'Olá, Gilson! Vim pelo site da Orto Premium e queria um orçamento.',
+    casa:       'Olá! Vim pelo site da Orto Premium.',
+    final:      'Olá, Gilson! Vim pelo site da Orto Premium e quero saber as condições.',
+    flutuante:  'Olá, Gilson! Vim pelo site da Orto Premium.',
+    rodape:     'Olá! Vim pelo site da Orto Premium.',
   };
 
   function linkZap(mensagem) {
@@ -242,7 +242,7 @@
         : '';
 
     const msg =
-      'Olá, Gilson! Vim pelo site da OrtoGold e tenho interesse em: ' +
+      'Olá, Gilson! Vim pelo site da Orto Premium e tenho interesse em: ' +
       p.nome + '. Pode me passar mais informações?';
 
     return (
@@ -575,7 +575,7 @@
         '<blockquote class="depoimento__texto">“' + d.texto + '”</blockquote>' +
         '<figcaption class="depoimento__pe">' +
         '<span class="depoimento__iniciais" aria-hidden="true">' + iniciais + '</span>' +
-        '<span><strong>' + d.nome + '</strong><small>' + (d.origem || 'Cliente OrtoGold') + '</small></span>' +
+        '<span><strong>' + d.nome + '</strong><small>' + (d.origem || 'Cliente Orto Premium') + '</small></span>' +
         '</figcaption></figure>'
       );
     }).join('');
@@ -600,9 +600,9 @@
     grade.innerHTML = Array.from({ length: 6 }, (_, i) => {
       const f = fotos[i];
       const dentro = f
-        ? '<img src="assets/img/' + f.arquivo + '" alt="' + (f.alt || 'Produto OrtoGold') +
+        ? '<img src="assets/img/' + f.arquivo + '" alt="' + (f.alt || 'Produto Orto Premium') +
           '" loading="lazy" decoding="async" width="300" height="300">'
-        : Ilustracoes.substitutoFoto(vazios[i], 'produto OrtoGold');
+        : Ilustracoes.substitutoFoto(vazios[i], 'produto Orto Premium');
       return '<a class="redes__foto" href="' + LOJA.instagramUrl + '" target="_blank" rel="noopener" data-cat="' + vazios[i] + '">' + dentro + '</a>';
     }).join('');
   }
@@ -657,7 +657,7 @@
         const frame = document.createElement('iframe');
         frame.src = 'https://www.google.com/maps?q=' + busca + '&output=embed';
         frame.loading = 'lazy';
-        frame.title = 'Mapa da fábrica OrtoGold';
+        frame.title = 'Mapa da fábrica Orto Premium';
         frame.referrerPolicy = 'no-referrer-when-downgrade';
         frame.allowFullscreen = true;
         botao.replaceWith(frame);
@@ -702,11 +702,11 @@
     return (
       '<svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" role="img" ' +
       'aria-label="Ilustração do consultor Gilson" style="width:100%;height:100%">' +
-      '<rect width="72" height="72" fill="#343A9B"/>' +
-      '<circle cx="36" cy="28" r="12" fill="#F0D489"/>' +
-      '<path d="M12 72c0-14 11-22 24-22s24 8 24 22H12z" fill="#0A0E1F"/>' +
+      '<rect width="72" height="72" fill="#17120a"/>' +
+      '<circle cx="36" cy="28" r="12" fill="#F4CF6E"/>' +
+      '<path d="M12 72c0-14 11-22 24-22s24 8 24 22H12z" fill="#0C0A06"/>' +
       '<path d="M30 50l6 10 6-10 6 3-4 19H28l-4-19 6-3z" fill="#fff"/>' +
-      '<path d="M33 50l3 6 3-6-3-2-3 2z" fill="#D9B75C"/>' +
+      '<path d="M33 50l3 6 3-6-3-2-3 2z" fill="#D9A21F"/>' +
       '</svg>'
     );
   }
